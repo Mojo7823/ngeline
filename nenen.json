@@ -1,0 +1,182 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -64,
+        256
+      ],
+      "id": "1636aa47-aca4-4a78-992a-253ab8277041",
+      "name": "Google Gemini (or other AI)",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "uGyXsWR55iiGWNav",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "line-message",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -448,
+        -16
+      ],
+      "id": "ac582700-981e-42eb-992c-1be21b0e92bc",
+      "name": "Webhook Entry",
+      "webhookId": "PLACEHOLDER-WEBHOOK-ID"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Respond to this message: {{ $json.body.events[0].message.text }}\nin user initial language, plain text output, without HTML.",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        32,
+        -16
+      ],
+      "id": "79566b49-96d2-4505-bc25-fb15641198e7",
+      "name": "AI Language Model"
+    },
+    {
+      "parameters": {
+        "jsCode": "const webhook = $(\"Webhook Entry\").item;\nconst aiAgent = $(\"AI Language Model\").item;\n\nif (!webhook?.json?.body?.events?.[0]?.replyToken || !aiAgent?.json?.output) {\n  throw new Error(\"Missing necessary data, please check the output structure of the Webhook & AI Agent nodes.\");\n}\n\n// Function to strip markdown formatting\nconst stripMarkdown = (text) => {\n  if (!text) return '';\n  return text\n     .replace(/\\*\\*([^*]+)\\*\\*/g, '$1') // Bold **text**\n     .replace(/__([^_]+)__/g, '$1')   // Bold __text__\n     .replace(/\\*([^*]+)\\*/g, '$1')      // Italic *text*\n     .replace(/_([^_]+)_/g, '$1')      // Italic _text_\n     .replace(/`([^`]+)`/g, '$1')      // Inline code `code`\n     .replace(/^\\s*[-*+]\\s+/gm, '')  // List items\n     .replace(/^\\s*\\d+\\.\\s+/gm, ''); // Numbered list items\n};\n\nconst replyToken = webhook.json.body.events[0].replyToken;\nconst rawText = aiAgent.json.output;\nconst cleanedText = stripMarkdown(rawText).trim(); // Clean the text\n\nreturn [\n  {\n    json: {\n      replyToken,\n      text: cleanedText, // Use the cleaned text\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        -16
+      ],
+      "id": "7dcfa3fe-bb03-427e-b08a-1629251ff6e8",
+      "name": "Process AI Response"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.line.me/v2/bot/message/reply",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer ozz/rBPtU+q4ZASsoAYkYuGqUfeHNak8Tu36kB9XSQ80KilpJqdRnf0c7tBpDdTdcLsvvEirfrifUlXYtcYNlWDRCP51uSrRf5kgRSP8djDE1Tb+emfVaQJgrdf+gMEWXDwHXE+vdQdQAC/FCd49xgdB04t89/1O/w1cDnyilFU="
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{JSON.stringify({\"replyToken\":$json.replyToken,\"messages\":[{\"type\":\"text\",\"text\":$json.text}]})}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        640,
+        -16
+      ],
+      "id": "757df136-5666-4882-aee1-34c177494d7d",
+      "name": "Send Response to LINE"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Webhook Entry').item.json.body.events[0].source.userId }}",
+        "contextWindowLength": 50
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        64,
+        240
+      ],
+      "id": "03160c2e-30ba-4d23-8625-3e2c6e0bec6c",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "zgpBgkUAbLf7SeU8",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Google Gemini (or other AI)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Language Model",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook Entry": {
+      "main": [
+        [
+          {
+            "node": "AI Language Model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Language Model": {
+      "main": [
+        [
+          {
+            "node": "Process AI Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process AI Response": {
+      "main": [
+        [
+          {
+            "node": "Send Response to LINE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Language Model",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "806d7713a5905f8e04d97541ae39c9cdaa858aa429b22ef9424c755f367c5041"
+  }
+}
