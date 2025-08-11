@@ -90,8 +90,21 @@
     },
     {
       "parameters": {
+        "jsCode": "// Message Processing and Quote Handling System\nconst webhook = $input.first();\nconst userId = webhook.json.body.events[0].source.userId;\nconst messageText = webhook.json.body.events[0].message.text;\nconst messageId = webhook.json.body.events[0].message.id;\nconst replyToken = webhook.json.body.events[0].replyToken;\nconst timestamp = webhook.json.body.events[0].timestamp;\nconst quoteToken = webhook.json.body.events[0].message.quoteToken || null;\nconst quotedMessageId = webhook.json.body.events[0].message.quotedMessageId || null;\n\n// Create message object\nconst messageObj = {\n  userId,\n  messageId,\n  messageText,\n  replyToken,\n  timestamp,\n  quoteToken,\n  quotedMessageId,\n  processed: false,\n  createdAt: new Date().toISOString(),\n  // Check if this is a quoted message\n  isQuotedMessage: !!quotedMessageId,\n  // Format message for processing\n  processedText: quotedMessageId ? \n    `[Replying to message ID: ${quotedMessageId}] ${messageText}` : \n    messageText\n};\n\nreturn [{\n  json: messageObj\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        288
+      ],
+      "id": "message-processor",
+      "name": "Message Processor"
+    },
+    {
+      "parameters": {
         "promptType": "define",
-        "text": "=Respond to this message: {{ $('Webhook Entry').item.json.body.events[0].message.text }}\nin user initial language, plain text output, without HTML.",
+        "text": "=You are a helpful AI assistant. Please respond to the following message in the user's language.\n\n{% if $('Message Processor').item.json.isQuotedMessage %}\nNote: This message is a reply to a previous message (ID: {{ $('Message Processor').item.json.quotedMessageId }}). Please consider this context when responding.\n{% endif %}\n\nUser message: {{ $('Message Processor').item.json.processedText }}\n\nPlease provide a clear, helpful response in plain text without HTML formatting. Keep your response concise and under 1000 characters when possible, as this is for a mobile chat interface.",
         "hasOutputParser": true,
         "options": {}
       },
@@ -106,7 +119,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const webhook = $(\"Webhook Entry\").item;\nconst aiAgent = $(\"AI Language Model\").item;\n\nif (!webhook?.json?.body?.events?.[0]?.replyToken || !aiAgent?.json?.output) {\n  throw new Error(\"Missing necessary data, please check the output structure of the Webhook & AI Agent nodes.\");\n}\n\n// Function to strip markdown formatting\nconst stripMarkdown = (text) => {\n  if (!text) return '';\n  return text\n     .replace(/\\*\\*([^*]+)\\*\\*/g, '$1') // Bold **text**\n     .replace(/__([^_]+)__/g, '$1')   // Bold __text__\n     .replace(/\\*([^*]+)\\*/g, '$1')      // Italic *text*\n     .replace(/_([^_]+)_/g, '$1')      // Italic _text_\n     .replace(/`([^`]+)`/g, '$1')      // Inline code `code`\n     .replace(/^\\s*[-*+]\\s+/gm, '')  // List items\n     .replace(/^\\s*\\d+\\.\\s+/gm, ''); // Numbered list items\n};\n\nconst replyToken = webhook.json.body.events[0].replyToken;\nconst rawText = aiAgent.json.output;\nconst cleanedText = stripMarkdown(rawText).trim(); // Clean the text\n\nreturn [\n  {\n    json: {\n      replyToken,\n      text: cleanedText, // Use the cleaned text\n    },\n  },\n];"
+        "jsCode": "const messageProcessor = $(\"Message Processor\").item;\nconst aiAgent = $(\"AI Language Model\").item;\n\nif (!messageProcessor?.json?.replyToken || !aiAgent?.json?.output) {\n  throw new Error(\"Missing necessary data, please check the output structure of the Message Processor & AI Agent nodes.\");\n}\n\n// Function to strip markdown formatting\nconst stripMarkdown = (text) => {\n  if (!text) return '';\n  return text\n     .replace(/\\*\\*([^*]+)\\*\\*/g, '$1') // Bold **text**\n     .replace(/__([^_]+)__/g, '$1')   // Bold __text__\n     .replace(/\\*([^*]+)\\*/g, '$1')      // Italic *text*\n     .replace(/_([^_]+)_/g, '$1')      // Italic _text_\n     .replace(/`([^`]+)`/g, '$1')      // Inline code `code`\n     .replace(/^\\s*[-*+]\\s+/gm, '')  // List items\n     .replace(/^\\s*\\d+\\.\\s+/gm, ''); // Numbered list items\n};\n\n// Function to truncate text to LINE's limit\nconst truncateText = (text, maxLength = 4900) => {\n  if (!text) return '';\n  if (text.length <= maxLength) return text;\n  \n  // Try to truncate at a sentence boundary\n  const truncated = text.substring(0, maxLength);\n  const lastSentence = truncated.lastIndexOf('.');\n  const lastQuestion = truncated.lastIndexOf('?');\n  const lastExclamation = truncated.lastIndexOf('!');\n  \n  const lastPunctuation = Math.max(lastSentence, lastQuestion, lastExclamation);\n  \n  if (lastPunctuation > maxLength * 0.8) {\n    // If we found punctuation in the last 20%, use it\n    return truncated.substring(0, lastPunctuation + 1);\n  } else {\n    // Otherwise, truncate at word boundary\n    const lastSpace = truncated.lastIndexOf(' ');\n    if (lastSpace > maxLength * 0.8) {\n      return truncated.substring(0, lastSpace) + '...';\n    } else {\n      return truncated.substring(0, maxLength - 3) + '...';\n    }\n  }\n};\n\nconst replyToken = messageProcessor.json.replyToken;\nconst rawText = aiAgent.json.output;\nconst cleanedText = stripMarkdown(rawText).trim();\nconst finalText = truncateText(cleanedText);\n\n// Validate text length (LINE limit is 5000 characters)\nif (finalText.length > 5000) {\n  throw new Error(`Message text too long: ${finalText.length} characters (max 5000)`);\n}\n\nif (finalText.length === 0) {\n  throw new Error('Message text is empty after processing');\n}\n\n// Prepare the message object for LINE API\nconst lineMessage = {\n  type: \"text\",\n  text: finalText\n};\n\n// Add quote token if the original message had one and we want to quote it\nif (messageProcessor.json.isQuotedMessage && messageProcessor.json.quoteToken) {\n  // We could optionally quote the original message here\n  // For now, we'll just send a regular response\n}\n\nreturn [\n  {\n    json: {\n      replyToken,\n      text: finalText,\n      originalText: cleanedText,\n      textLength: finalText.length,\n      wasTruncated: finalText.length < cleanedText.length,\n      originalMessageId: messageProcessor.json.messageId,\n      userId: messageProcessor.json.userId,\n      isQuotedResponse: messageProcessor.json.isQuotedMessage,\n      message: lineMessage\n    },\n  },\n];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -136,7 +149,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{JSON.stringify({\"replyToken\":$json.replyToken,\"messages\":[{\"type\":\"text\",\"text\":$json.text}]})}}",
+        "jsonBody": "={{JSON.stringify({\"replyToken\":$json.replyToken,\"messages\":[$json.message]})}}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -151,7 +164,7 @@
     {
       "parameters": {
         "sessionIdType": "customKey",
-        "sessionKey": "={{ $('Webhook Entry').item.json.body.events[0].source.userId }}",
+        "sessionKey": "={{ $('Message Processor').item.json.userId }}",
         "contextWindowLength": 50
       },
       "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
@@ -188,17 +201,19 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{JSON.stringify({\"chatId\": $json.body.events[0].source.userId, \"loadingSeconds\": 30})}}",
-        "options": {}
+        "jsonBody": "={{JSON.stringify({\"chatId\": $json.userId, \"loadingSeconds\": 30})}}",
+        "options": {
+          "ignoreHttpStatusErrors": true
+        }
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1568,
+        1792,
         288
       ],
       "id": "65848607-031e-431b-8de9-cfb6e0fee399",
-      "name": "Start Loading Animation1"
+      "name": "Start Loading Animation"
     }
   ],
   "connections": {
@@ -233,7 +248,29 @@
       "main": [
         [
           {
-            "node": "Start Loading Animation1",
+            "node": "Message Processor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message Processor": {
+      "main": [
+        [
+          {
+            "node": "Start Loading Animation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start Loading Animation": {
+      "main": [
+        [
+          {
+            "node": "AI Language Model",
             "type": "main",
             "index": 0
           }
@@ -268,17 +305,6 @@
           {
             "node": "AI Language Model",
             "type": "ai_memory",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Start Loading Animation1": {
-      "main": [
-        [
-          {
-            "node": "AI Language Model",
-            "type": "main",
             "index": 0
           }
         ]
