@@ -9,7 +9,7 @@
       "typeVersion": 1,
       "position": [
         -880,
-        -176
+        -16
       ],
       "id": "94fed2d8-316f-43f1-bc88-c523eeb3550a",
       "name": "Azure OpenAI Chat Model",
@@ -28,8 +28,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        -208,
-        -160
+        16,
+        -224
       ],
       "id": "40c84b29-404d-4114-9b97-5de05653638d",
       "name": "Google Gemini Chat Model",
@@ -49,8 +49,8 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -848,
-        -432
+        -880,
+        -448
       ],
       "id": "3f4227da-b0ad-49bc-8219-09ef57b22bde",
       "name": "Webhook Entry",
@@ -83,8 +83,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        -672,
-        -432
+        -656,
+        -448
       ],
       "id": "3e1b34e7-df44-4b41-87ef-773ba44b6e5f",
       "name": "Filter Message Events"
@@ -96,7 +96,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -464,
+        -432,
         -448
       ],
       "id": "9d908582-3dbd-40a5-9810-dca068d99c32",
@@ -114,8 +114,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
       "position": [
-        -128,
-        -416
+        72,
+        -448
       ],
       "id": "3e85e40a-f6c0-474d-85e3-c3973e2b7762",
       "name": "AI Language Model"
@@ -127,8 +127,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        160,
-        -432
+        640,
+        -448
       ],
       "id": "35fa7f51-4a1f-46e9-a463-227c357f1e31",
       "name": "Process AI Response"
@@ -158,8 +158,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        384,
-        -432
+        864,
+        -448
       ],
       "id": "a82ba8b9-1c99-4147-9ab7-ad1e16cb15dc",
       "name": "Send Response to LINE"
@@ -173,8 +173,8 @@
       "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
       "typeVersion": 1.3,
       "position": [
-        -80,
-        -160
+        144,
+        -224
       ],
       "id": "40f1245e-357e-4c1b-8d1e-03c0fa2a70ea",
       "name": "Postgres Chat Memory",
@@ -210,8 +210,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -272,
-        -432
+        -208,
+        -448
       ],
       "id": "69a11171-1d87-4128-9e1a-f8645f08477e",
       "name": "Start Loading Animation"
@@ -231,8 +231,8 @@
       "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
       "typeVersion": 1.3,
       "position": [
-        64,
-        -80
+        272,
+        -224
       ],
       "id": "676af40b-3332-4f4e-90bb-c1c26df20439",
       "name": "Supabase Vector Store",
@@ -248,11 +248,441 @@
       "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
       "typeVersion": 1,
       "position": [
-        160,
-        128
+        352,
+        -16
       ],
       "id": "ef6d967e-baa3-4054-8ac8-fafb1f787a2d",
       "name": "Embeddings Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "uGyXsWR55iiGWNav",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "cb637d5e-5751-4449-9d6e-47af8332da5f",
+      "name": "Loop Over Items",
+      "type": "n8n-nodes-base.splitInBatches",
+      "position": [
+        1408,
+        1056
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "id": "59ee72f5-9bd3-4193-8752-b8631c0ac29b",
+      "name": "Extract from PDF",
+      "type": "n8n-nodes-base.extractFromFile",
+      "position": [
+        2592,
+        1024
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "e0f1f006-86af-40d8-835b-32c7f396349d",
+      "name": "Extract from CSV",
+      "type": "n8n-nodes-base.extractFromFile",
+      "position": [
+        2592,
+        1216
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "jsonMode": "expressionData",
+        "jsonData": "={{ $json.concatenated_text }}",
+        "options": {
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "file_id",
+                "value": "={{ $('Set File ID').first().json.file_id}}"
+              },
+              {
+                "name": "title",
+                "value": "={{ $('Create Metadata Title & Description').item.json.output.title }}"
+              },
+              {
+                "name": "description",
+                "value": "={{ $('Create Metadata Title & Description').item.json.output.description }}"
+              }
+            ]
+          }
+        }
+      },
+      "id": "8703a3d3-a7de-49fc-be9d-facb039e56cd",
+      "name": "Default Data Loader",
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "position": [
+        4672,
+        1216
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "https://drive.google.com/drive/u/0/folders/1p-g6TAF5CMjP6nvutrw3JhqCUYQR-s9r",
+          "mode": "url"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "id": "bdfd14c5-9183-4f9f-ac52-9940cc451ff3",
+      "name": "Google Drive Trigger File Created",
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "position": [
+        1152,
+        1056
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ofkQmpnUvn6KDdBh",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "separator": "###SPLIT###"
+      },
+      "id": "b7026d8d-ce3b-4b41-bff0-43b7eeacd255",
+      "name": "Character Text Splitter",
+      "type": "@n8n/n8n-nodes-langchain.textSplitterCharacterTextSplitter",
+      "position": [
+        4768,
+        1408
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0144a9a7-6e73-46c4-979f-838ad5c62b89",
+              "name": "file_id",
+              "type": "string",
+              "value": "={{ $json.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ed510789-0548-4ce0-b64f-7eb438b2615e",
+      "name": "Set File ID",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1664,
+        1088
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $('Set File ID').item.json.file_id }}"
+        },
+        "options": {
+          "googleFileConversion": {
+            "conversion": {
+              "docsToFormat": "application/pdf"
+            }
+          }
+        }
+      },
+      "id": "f3c6c24d-89e6-4208-bdfb-a90694466cb3",
+      "name": "Download FIle",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        1904,
+        1088
+      ],
+      "typeVersion": 3,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ofkQmpnUvn6KDdBh",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "e959d5a8-d311-4a29-b400-7c07468a72fe",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $binary.data.mimeType }}",
+                    "rightValue": "application/pdf"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "application/pdf"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "d5ae6f2d-e62d-4e08-aa06-629e6dfa7ee8",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $binary.data.mimeType }}",
+                    "rightValue": "text/csv"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "text/csv"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "bd9d86c0-7d39-4964-af84-04875b8b81b5",
+      "name": "Switch",
+      "type": "n8n-nodes-base.switch",
+      "position": [
+        2192,
+        1088
+      ],
+      "typeVersion": 3.2
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"title\": \"Test Title (Replace it with real title\",\n    \"description\":\"Test Description (Replace it with real description)\"\n}"
+      },
+      "id": "5c75011f-3734-488e-a9ba-76f2291bcc8d",
+      "name": "Structured Output Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "position": [
+        3408,
+        1296
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=<document> \n{{ $('Document Data').first().json.data }}\n</document> \n\nHere is the chunk we want to situate within the overall document:\n\n<chunk> \n{{ $json.chunk }}\n</chunk> \n\nPlease:\n- Provide a short and succinct **context** to situate this chunk within the document for improved search retrieval.\n- Return the **original chunk** exactly as provided unless a correction is necessary.\n- If the chunk contains an **incomplete number, percentage, or entity**, correct it using the full document.\n- If part of a **sentence is cut off**, reconstruct the missing words only if necessary for clarity.\n- If the chunk is part of a table, include the complete table entry to maintain data integrity\n- Do not add any additional explanations or formatting beyond the required output.\n\nFill in the following format:\n[succinct context] : [original chunk or corrected version if necessary]\n\nYour response should contain only the text that replaces these placeholders, without including the placeholder labels themselves."
+      },
+      "id": "f3fd1e1a-bdef-4b58-ba1a-e1ee0a4c713c",
+      "name": "Process Context",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "position": [
+        4032,
+        1024
+      ],
+      "typeVersion": 1.6
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"data\":  {{ JSON.stringify($json.text) }}\n} ",
+        "options": {}
+      },
+      "id": "9f29d201-2752-41f8-b3f5-f291330341d0",
+      "name": "Document Data",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        2848,
+        1024
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "chunks",
+        "options": {
+          "destinationFieldName": "chunk"
+        }
+      },
+      "id": "bc9762ff-903f-478c-9ab1-178718c1137d",
+      "name": "Split Out",
+      "type": "n8n-nodes-base.splitOut",
+      "position": [
+        3648,
+        1024
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "aggregation": "concatenate",
+              "field": "text",
+              "separateBy": "other",
+              "customSeparator": "###SPLIT###"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "929958bd-abe5-409f-9358-b506915b2710",
+      "name": "Summarize",
+      "type": "n8n-nodes-base.summarize",
+      "position": [
+        4352,
+        1024
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "documents",
+          "cachedResultName": "documents"
+        },
+        "options": {}
+      },
+      "id": "42bd07a3-c180-45bb-8361-20cb55114db4",
+      "name": "Add Data to Supabase Vector Store",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "position": [
+        4544,
+        1024
+      ],
+      "typeVersion": 1.1,
+      "credentials": {
+        "supabaseApi": {
+          "id": "WcvuQZST4jKyM6H4",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "513f9ff6-5204-4aa1-bcc0-28be74bce840",
+      "name": "Google Gemini Chat Model1",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        3216,
+        1328
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "uGyXsWR55iiGWNav",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Create metadata title and metadata description based on the document specified below (below ##Document). Metadata title and metadata description will be used to seperate data in vector DB that will be used for RAG.\n\n##Document\n{{ $('Document Data').item.json.data }}",
+        "hasOutputParser": true
+      },
+      "id": "dce6dbd4-ea49-4be6-bbb6-61900cf48f40",
+      "name": "Create Metadata Title & Description",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "position": [
+        3152,
+        1024
+      ],
+      "typeVersion": 1.6
+    },
+    {
+      "parameters": {
+        "jsCode": "const chunkSize = 1000;\nconst chunkOverlap = 200;\n//const text = $node[\"ABC\"].json.data.replace(/\\n/, '');\nconst text = $items(\"Document Data\")[0].json.data.replace(/\\n/, '');\n\nconst chunks = [];\nlet remainingText = text;\n\nwhile (remainingText.length > 0) {\n    let splitPoint;\n\n    // Try splitting at paragraph level first\n    splitPoint = remainingText.lastIndexOf(\"\\n\\n\", chunkSize);\n    \n    // If no paragraph split, try splitting at sentence level\n    if (splitPoint === -1) {\n        splitPoint = remainingText.lastIndexOf(\". \", chunkSize);\n    }\n\n    // If no sentence split, try splitting at word level\n    if (splitPoint === -1) {\n        splitPoint = remainingText.lastIndexOf(\" \", chunkSize);\n    }\n\n    // If still no split point, force cut at chunkSize\n    if (splitPoint === -1 || splitPoint < chunkSize * 0.5) {  \n        splitPoint = chunkSize; // Hard split if no good split point\n    }\n\n    // Extract chunk and adjust remaining text with overlap\n    let chunk = remainingText.substring(0, splitPoint).trim();\n    chunks.push(chunk);\n\n    // Move the pointer forward while keeping the overlap\n    remainingText = remainingText.substring(Math.max(0, splitPoint - chunkOverlap)).trim();\n\n    // Break if remaining text is too small to form another chunk\n    if (remainingText.length < chunkSize * 0.2) {\n        chunks.push(remainingText);\n        break;\n    }\n}\n\nreturn { chunks };"
+      },
+      "id": "a46aef17-4fbe-4a84-ac7d-f938882291ec",
+      "name": "Split into chunks",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        3488,
+        1024
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "30180d49-edcc-43e6-a966-0f5933a6f6bb",
+      "name": "Google Gemini Chat Model2",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        4192,
+        1184
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "uGyXsWR55iiGWNav",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-embedding-exp-03-07"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        4496,
+        1296
+      ],
+      "id": "5c99b8d1-4853-4545-b122-404835a9ca85",
+      "name": "Embeddings Google Gemini1",
       "credentials": {
         "googlePalmApi": {
           "id": "uGyXsWR55iiGWNav",
@@ -366,6 +796,223 @@
         [
           {
             "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Set File ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from PDF": {
+      "main": [
+        [
+          {
+            "node": "Document Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from CSV": {
+      "main": [
+        [
+          {
+            "node": "Document Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Add Data to Supabase Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive Trigger File Created": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set File ID": {
+      "main": [
+        [
+          {
+            "node": "Download FIle",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download FIle": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Extract from PDF",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extract from CSV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Create Metadata Title & Description",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Context": {
+      "main": [
+        [
+          {
+            "node": "Summarize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Document Data": {
+      "main": [
+        [
+          {
+            "node": "Create Metadata Title & Description",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Process Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarize": {
+      "main": [
+        [
+          {
+            "node": "Add Data to Supabase Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Create Metadata Title & Description",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Metadata Title & Description": {
+      "main": [
+        [
+          {
+            "node": "Split into chunks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split into chunks": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Process Context",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Add Data to Supabase Vector Store",
             "type": "ai_embedding",
             "index": 0
           }
