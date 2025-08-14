@@ -104,17 +104,162 @@
     },
     {
       "parameters": {
+        "jsCode": "// Skip duplicate check for now - always proceed to save\n// TODO: Re-enable duplicate check once line_messages table is created\nconst messageData = $input.first().json;\n\nconsole.log('Processing message:', messageData.message_id);\n\n// Return the data to continue the flow\nreturn [{\n  json: messageData\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        96,
+        400
+      ],
+      "id": "check-message-exists",
+      "name": "Pass Through (Skip Duplicate Check)"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Always proceed - no duplicate check for now\nconst messageData = $input.first().json;\n\n// Return length 0 to always trigger \"save to database\"\nreturn [{\n  json: {\n    length: 0,\n    ...messageData\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        320,
+        400
+      ],
+      "id": "message-not-exists-check",
+      "name": "Always Save Check"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "tableId": "line_messages",
+        "additionalFields": {
+          "columns": {
+            "message_id": "={{ $json.message_id }}",
+            "session_id": "={{ $json.session_id }}",
+            "message_text": "={{ $json.message_text }}",
+            "message_type": "={{ $json.message_type }}",
+            "reply_token": "={{ $json.reply_token }}",
+            "timestamp": "={{ $json.timestamp }}",
+            "quote_token": "={{ $json.quote_token }}",
+            "quoted_message_id": "={{ $json.quoted_message_id }}",
+            "raw_message": "={{ JSON.stringify($json.raw_message) }}",
+            "chat_message": "={{ JSON.stringify($json.chat_message) }}",
+            "created_at": "={{ $json.created_at }}",
+            "processed": "={{ $json.processed }}"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        544,
+        320
+      ],
+      "id": "save-message-to-db",
+      "name": "Save Message to Database",
+      "credentials": {
+        "supabaseApi": {
+          "id": "WcvuQZST4jKyM6H4",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare message data for database storage (compatible with n8n_chat_dev structure)\nconst messageData = $input.first().json;\n\n// Create chat message in the same format as n8n_chat_dev\nconst chatMessage = {\n  type: \"human\",\n  content: messageData.messageText,\n  additional_kwargs: {},\n  response_metadata: {}\n};\n\n// Create raw message data (full LINE webhook data)\nconst rawMessage = {\n  messageId: messageData.messageId,\n  userId: messageData.userId,\n  text: messageData.messageText,\n  timestamp: messageData.timestamp,\n  quoteToken: messageData.quoteToken,\n  quotedMessageId: messageData.quotedMessageId\n};\n\nreturn [{\n  json: {\n    message_id: messageData.messageId,\n    session_id: messageData.userId, // Using session_id to match n8n_chat_dev\n    message_text: messageData.messageText,\n    message_type: 'human',\n    reply_token: messageData.replyToken,\n    timestamp: new Date(messageData.timestamp).toISOString(),\n    quote_token: messageData.quoteToken,\n    quoted_message_id: messageData.quotedMessageId,\n    raw_message: rawMessage,\n    chat_message: chatMessage,\n    created_at: messageData.createdAt,\n    processed: messageData.processed\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        96,
+        240
+      ],
+      "id": "prepare-message-data",
+      "name": "Prepare Message Data"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "check-quoted-message",
+              "leftValue": "={{ $json.quotedMessageId }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        96,
+        680
+      ],
+      "id": "check-if-quoted-message",
+      "name": "Check If Quoted Message"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "line_messages",
+        "returnAll": false,
+        "limit": 1,
+        "filterType": "string",
+        "filterString": "=message_id=eq.{{ $json.quotedMessageId }}"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        320,
+        680
+      ],
+      "id": "get-quoted-message",
+      "name": "Get Quoted Message",
+      "credentials": {
+        "supabaseApi": {
+          "id": "WcvuQZST4jKyM6H4",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Enhanced Message Processing with Quote Handling\nconst webhook = $input.first();\nconst savedMessage = $('Save Message to Database').first();\nconst quotedMessage = $('Get Quoted Message').first();\n\nconst userId = webhook.json.body.events[0].source.userId;\nconst messageText = webhook.json.body.events[0].message.text;\nconst messageId = webhook.json.body.events[0].message.id;\nconst replyToken = webhook.json.body.events[0].replyToken;\nconst timestamp = webhook.json.body.events[0].timestamp;\nconst quoteToken = webhook.json.body.events[0].message.quoteToken || null;\nconst quotedMessageId = webhook.json.body.events[0].message.quotedMessageId || null;\n\n// Check if this is a quoted message and we have the original message content\nlet quotedMessageText = null;\nif (quotedMessageId && quotedMessage?.json) {\n  quotedMessageText = quotedMessage.json.message_text || null;\n}\n\n// Create message object\nconst messageObj = {\n  userId,\n  messageId,\n  messageText,\n  replyToken,\n  timestamp,\n  quoteToken,\n  quotedMessageId,\n  quotedMessageText,\n  processed: false,\n  createdAt: new Date().toISOString(),\n  // Check if this is a quoted message\n  isQuotedMessage: !!quotedMessageId,\n  // Format message for processing with actual quoted content\n  processedText: quotedMessageId && quotedMessageText ? \n    `[Replying to message \"${quotedMessageText}\"] ${messageText}` : \n    quotedMessageId ? \n      `[Replying to message ID: ${quotedMessageId}] ${messageText}` : \n      messageText,\n  // Quote configuration - set to true if you want to quote every user message\n  shouldQuoteInResponse: true  // Change to false if you don't want quoting\n};\n\nreturn [{\n  json: messageObj\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        544,
+        560
+      ],
+      "id": "enhanced-message-processor",
+      "name": "Enhanced Message Processor"
+    },
+    {
+      "parameters": {
         "promptType": "define",
-        "text": "={{ $('Message Processor').item.json.processedText }}",
+        "text": "={{ $('Enhanced Message Processor').item.json.processedText }}",
         "hasOutputParser": true,
         "options": {
-          "systemMessage": "=You are a helpful AI assistant. Please respond to the following message in the user's language.\n\n{% if $('Message Processor').item.json.isQuotedMessage %}\nNote: This message is a reply to a previous message (ID: {{ $('Message Processor').item.json.quotedMessageId }}). Please consider this context when responding.\n{% endif %}\n\nPlease provide a clear, helpful response in plain text without HTML formatting. Keep your response concise and under 800 characters when possible, as this is for a mobile chat interface.\n\nIMPORTANT INSTRUCTIONS FOR DOCUMENT RETRIEVAL:\n- Only use the user_documents tool when the user specifically asks about standards like ISO, EN-18031, or technical documentation\n- For general conversation, chat, greetings, or non-technical questions, respond directly without using any tools\n- If you use the retrieval tool and get an error, inform the user that the document search is temporarily unavailable and provide a general response instead\n\nWhen answering questions about standards:\n- First try to use the user_documents tool to search for relevant information\n- If the user asks about EN-18031 or ISO 42001, search for 'frEN-18031' in the documents\n- When you receive tool results, extract only the most relevant information and summarize it concisely\n- Focus on key facts: what the standard is, its main purpose, and key requirements\n- Keep your final response under 800 characters to ensure it fits in the chat interface\n- Always provide source information (clause, section, page) when available\n- If no relevant documents are found, clearly state that you don't have that specific information\n\nFor general chat and non-technical questions, respond directly and naturally.\n\nIMPORTANT: After using any tool, always provide a direct, concise response. Do not include thinking tags or tool output in your final response."
+          "systemMessage": "=You are a helpful AI assistant. Please respond to the following message in the user's language.\n\n{% if $('Enhanced Message Processor').item.json.isQuotedMessage %}\n{% if $('Enhanced Message Processor').item.json.quotedMessageText %}\nNote: This message is a reply to a previous message: \"{{ $('Enhanced Message Processor').item.json.quotedMessageText }}\". Please consider this context when responding.\n{% else %}\nNote: This message is a reply to a previous message (ID: {{ $('Enhanced Message Processor').item.json.quotedMessageId }}). Please consider this context when responding.\n{% endif %}\n{% endif %}\n\nPlease provide a clear, helpful response in plain text without HTML formatting. Keep your response concise and under 800 characters when possible, as this is for a mobile chat interface.\n\nIMPORTANT INSTRUCTIONS FOR DOCUMENT RETRIEVAL:\n- Only use the user_documents tool when the user specifically asks about standards like ISO, EN-18031, or technical documentation\n- For general conversation, chat, greetings, or non-technical questions, respond directly without using any tools\n- If you use the retrieval tool and get an error, inform the user that the document search is temporarily unavailable and provide a general response instead\n\nWhen answering questions about standards:\n- First try to use the user_documents tool to search for relevant information\n- If the user asks about EN-18031 or ISO 42001, search for 'frEN-18031' in the documents\n- When you receive tool results, extract only the most relevant information and summarize it concisely\n- Focus on key facts: what the standard is, its main purpose, and key requirements\n- Keep your final response under 800 characters to ensure it fits in the chat interface\n- Always provide source information (clause, section, page) when available\n- If no relevant documents are found, clearly state that you don't have that specific information\n\nFor general chat and non-technical questions, respond directly and naturally.\n\nIMPORTANT: After using any tool, always provide a direct, concise response. Do not include thinking tags or tool output in your final response."
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
       "position": [
-        384,
+        768,
         560
       ],
       "id": "b13c4045-27e2-44c2-98c8-6956fe2dffda",
@@ -122,12 +267,12 @@
     },
     {
       "parameters": {
-        "jsCode": "const messageProcessor = $(\"Message Processor\").item;\nconst aiAgent = $(\"AI Language Model\").item;\n\nif (!messageProcessor?.json?.replyToken) {\n  throw new Error(\"Missing reply token from Message Processor node.\");\n}\n\nif (!aiAgent?.json?.output) {\n  // Check if this was a standards/technical question that might have triggered tool usage\n  const userMessage = messageProcessor.json.messageText || '';\n  const isStandardsQuery = /\\b(iso|en-?\\d+|standard|documentation)\\b/i.test(userMessage);\n  \n  let fallbackText;\n  if (isStandardsQuery) {\n    fallbackText = \"I apologize, but I'm having trouble accessing the document database right now. Please try asking about the specific standard again in a moment, or rephrase your question.\";\n  } else {\n    fallbackText = \"I apologize, but I'm experiencing technical difficulties right now. Please try again in a moment.\";\n  }\n  \n  const fallbackMessage = {\n    type: \"text\",\n    text: fallbackText\n  };\n  \n  if (messageProcessor.json.shouldQuoteInResponse && messageProcessor.json.quoteToken) {\n    fallbackMessage.quoteToken = messageProcessor.json.quoteToken;\n  }\n  \n  return [{\n    json: {\n      replyToken: messageProcessor.json.replyToken,\n      text: fallbackMessage.text,\n      originalText: fallbackMessage.text,\n      textLength: fallbackMessage.text.length,\n      wasTruncated: false,\n      originalMessageId: messageProcessor.json.messageId,\n      userId: messageProcessor.json.userId,\n      isQuotedResponse: messageProcessor.json.isQuotedMessage,\n      message: fallbackMessage,\n      isErrorFallback: true\n    }\n  }];\n}\n\n// Function to strip markdown formatting and thinking tags\nconst stripMarkdown = (text) => {\n  if (!text) return '';\n  return text\n     .replace(/<think>[\\s\\S]*?<\\/think>/gi, '') // Remove thinking tags and content\n     .replace(/\\*\\*([^*]+)\\*\\*/g, '$1') // Bold **text**\n     .replace(/__([^_]+)__/g, '$1')   // Bold __text__\n     .replace(/\\*([^*]+)\\*/g, '$1')      // Italic *text*\n     .replace(/_([^_]+)_/g, '$1')      // Italic _text_\n     .replace(/`([^`]+)`/g, '$1')      // Inline code `code`\n     .replace(/^\\s*[-*+]\\s+/gm, '')  // List items\n     .replace(/^\\s*\\d+\\.\\s+/gm, '') // Numbered list items\n     .trim(); // Clean up any extra whitespace\n};\n\n// Function to truncate text to LINE's limit\nconst truncateText = (text, maxLength = 4900) => {\n  if (!text) return '';\n  if (text.length <= maxLength) return text;\n  \n  // Try to truncate at a sentence boundary\n  const truncated = text.substring(0, maxLength);\n  const lastSentence = truncated.lastIndexOf('.');\n  const lastQuestion = truncated.lastIndexOf('?');\n  const lastExclamation = truncated.lastIndexOf('!');\n  \n  const lastPunctuation = Math.max(lastSentence, lastQuestion, lastExclamation);\n  \n  if (lastPunctuation > maxLength * 0.8) {\n    // If we found punctuation in the last 20%, use it\n    return truncated.substring(0, lastPunctuation + 1);\n  } else {\n    // Otherwise, truncate at word boundary\n    const lastSpace = truncated.lastIndexOf(' ');\n    if (lastSpace > maxLength * 0.8) {\n      return truncated.substring(0, lastSpace) + '...';\n    } else {\n      return truncated.substring(0, maxLength - 3) + '...';\n    }\n  }\n};\n\nconst replyToken = messageProcessor.json.replyToken;\nconst rawText = aiAgent.json.output;\nconst cleanedText = stripMarkdown(rawText).trim();\nconst finalText = truncateText(cleanedText);\n\n// Validate text length (LINE limit is 5000 characters)\nif (finalText.length > 5000) {\n  throw new Error(`Message text too long: ${finalText.length} characters (max 5000)`);\n}\n\nif (finalText.length === 0) {\n  throw new Error('Message text is empty after processing');\n}\n\n// Prepare the message object for LINE API\nconst lineMessage = {\n  type: \"text\",\n  text: finalText\n};\n\n// Add quote token to quote the user's original message in the response\nif (messageProcessor.json.shouldQuoteInResponse && messageProcessor.json.quoteToken) {\n  lineMessage.quoteToken = messageProcessor.json.quoteToken;\n}\n\nreturn [\n  {\n    json: {\n      replyToken,\n      text: finalText,\n      originalText: cleanedText,\n      textLength: finalText.length,\n      wasTruncated: finalText.length < cleanedText.length,\n      originalMessageId: messageProcessor.json.messageId,\n      userId: messageProcessor.json.userId,\n      isQuotedResponse: messageProcessor.json.isQuotedMessage,\n      message: lineMessage\n    },\n  },\n];"
+        "jsCode": "const messageProcessor = $(\"Enhanced Message Processor\").item;\nconst aiAgent = $(\"AI Language Model\").item;\n\nif (!messageProcessor?.json?.replyToken) {\n  throw new Error(\"Missing reply token from Enhanced Message Processor node.\");\n}\n\nif (!aiAgent?.json?.output) {\n  // Check if this was a standards/technical question that might have triggered tool usage\n  const userMessage = messageProcessor.json.messageText || '';\n  const isStandardsQuery = /\\b(iso|en-?\\d+|standard|documentation)\\b/i.test(userMessage);\n  \n  let fallbackText;\n  if (isStandardsQuery) {\n    fallbackText = \"I apologize, but I'm having trouble accessing the document database right now. Please try asking about the specific standard again in a moment, or rephrase your question.\";\n  } else {\n    fallbackText = \"I apologize, but I'm experiencing technical difficulties right now. Please try again in a moment.\";\n  }\n  \n  const fallbackMessage = {\n    type: \"text\",\n    text: fallbackText\n  };\n  \n  if (messageProcessor.json.shouldQuoteInResponse && messageProcessor.json.quoteToken) {\n    fallbackMessage.quoteToken = messageProcessor.json.quoteToken;\n  }\n  \n  return [{\n    json: {\n      replyToken: messageProcessor.json.replyToken,\n      text: fallbackMessage.text,\n      originalText: fallbackMessage.text,\n      textLength: fallbackMessage.text.length,\n      wasTruncated: false,\n      originalMessageId: messageProcessor.json.messageId,\n      userId: messageProcessor.json.userId,\n      isQuotedResponse: messageProcessor.json.isQuotedMessage,\n      message: fallbackMessage,\n      isErrorFallback: true\n    }\n  }];\n}\n\n// Function to strip markdown formatting and thinking tags\nconst stripMarkdown = (text) => {\n  if (!text) return '';\n  return text\n     .replace(/<think>[\\s\\S]*?<\\/think>/gi, '') // Remove thinking tags and content\n     .replace(/\\*\\*([^*]+)\\*\\*/g, '$1') // Bold **text**\n     .replace(/__([^_]+)__/g, '$1')   // Bold __text__\n     .replace(/\\*([^*]+)\\*/g, '$1')      // Italic *text*\n     .replace(/_([^_]+)_/g, '$1')      // Italic _text_\n     .replace(/`([^`]+)`/g, '$1')      // Inline code `code`\n     .replace(/^\\s*[-*+]\\s+/gm, '')  // List items\n     .replace(/^\\s*\\d+\\.\\s+/gm, '') // Numbered list items\n     .trim(); // Clean up any extra whitespace\n};\n\n// Function to truncate text to LINE's limit\nconst truncateText = (text, maxLength = 4900) => {\n  if (!text) return '';\n  if (text.length <= maxLength) return text;\n  \n  // Try to truncate at a sentence boundary\n  const truncated = text.substring(0, maxLength);\n  const lastSentence = truncated.lastIndexOf('.');\n  const lastQuestion = truncated.lastIndexOf('?');\n  const lastExclamation = truncated.lastIndexOf('!');\n  \n  const lastPunctuation = Math.max(lastSentence, lastQuestion, lastExclamation);\n  \n  if (lastPunctuation > maxLength * 0.8) {\n    // If we found punctuation in the last 20%, use it\n    return truncated.substring(0, lastPunctuation + 1);\n  } else {\n    // Otherwise, truncate at word boundary\n    const lastSpace = truncated.lastIndexOf(' ');\n    if (lastSpace > maxLength * 0.8) {\n      return truncated.substring(0, lastSpace) + '...';\n    } else {\n      return truncated.substring(0, maxLength - 3) + '...';\n    }\n  }\n};\n\nconst replyToken = messageProcessor.json.replyToken;\nconst rawText = aiAgent.json.output;\nconst cleanedText = stripMarkdown(rawText).trim();\nconst finalText = truncateText(cleanedText);\n\n// Validate text length (LINE limit is 5000 characters)\nif (finalText.length > 5000) {\n  throw new Error(`Message text too long: ${finalText.length} characters (max 5000)`);\n}\n\nif (finalText.length === 0) {\n  throw new Error('Message text is empty after processing');\n}\n\n// Prepare the message object for LINE API\nconst lineMessage = {\n  type: \"text\",\n  text: finalText\n};\n\n// Add quote token to quote the user's original message in the response\nif (messageProcessor.json.shouldQuoteInResponse && messageProcessor.json.quoteToken) {\n  lineMessage.quoteToken = messageProcessor.json.quoteToken;\n}\n\nreturn [\n  {\n    json: {\n      replyToken,\n      text: finalText,\n      originalText: cleanedText,\n      textLength: finalText.length,\n      wasTruncated: finalText.length < cleanedText.length,\n      originalMessageId: messageProcessor.json.messageId,\n      userId: messageProcessor.json.userId,\n      isQuotedResponse: messageProcessor.json.isQuotedMessage,\n      message: lineMessage\n    },\n  },\n];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        944,
+        1328,
         560
       ],
       "id": "16925a39-edcc-487c-a6fa-e8fd89060aa9",
@@ -158,7 +303,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1168,
+        1552,
         560
       ],
       "id": "e5aff841-9230-4f75-aba8-74643c8130d5",
@@ -189,7 +334,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        96,
+        480,
         560
       ],
       "id": "28d79ac6-3ed1-4ba7-8e41-c388e9ba89bd",
@@ -751,6 +896,90 @@
       ]
     },
     "Message Processor": {
+      "main": [
+        [
+          {
+            "node": "Prepare Message Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Message Data": {
+      "main": [
+        [
+          {
+            "node": "Pass Through (Skip Duplicate Check)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pass Through (Skip Duplicate Check)": {
+      "main": [
+        [
+          {
+            "node": "Always Save Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Always Save Check": {
+      "main": [
+        [
+          {
+            "node": "Save Message to Database",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Message to Database": {
+      "main": [
+        [
+          {
+            "node": "Check If Quoted Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check If Quoted Message": {
+      "main": [
+        [
+          {
+            "node": "Get Quoted Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Enhanced Message Processor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Quoted Message": {
+      "main": [
+        [
+          {
+            "node": "Enhanced Message Processor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enhanced Message Processor": {
       "main": [
         [
           {
