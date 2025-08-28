@@ -4,7 +4,11 @@ A sophisticated n8n workflow that implements an AI-powered LINE chatbot with Ret
 
 ## 🌟 Features Overview
 
-### 💬 LINE Messaging Integration
+### �️ Guardian Node for Security
+- **Prompt injection detection**
+- **Content moderation**
+
+### �💬 LINE Messaging Integration
 - **Real-time messaging** via LINE Messaging API webhooks
 - **Quote support** for threaded conversations
 - **Loading animations** during AI processing
@@ -47,7 +51,8 @@ graph TD
     A[LINE Webhook] --> B[Message Filter]
     B --> C[Message Processor]
     C --> D[Loading Animation]
-    D --> E[AI Agent with RAG]
+    D --> M[Guardian Node]
+    M --> E[AI Agent with RAG]
     E --> F[Response Processor]
     F --> G[Send to LINE]
     
