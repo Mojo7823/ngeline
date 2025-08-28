@@ -23,10 +23,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        6976,
+        -2288,
         -400
       ],
-      "id": "c89fc0ba-3de3-4ad6-ae7f-d442e9ff2677",
+      "id": "c774fe27-0aff-4c9c-bec1-c0b4a4100ac1",
       "name": "Set Schema1"
     },
     {
@@ -36,10 +36,10 @@
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
       "position": [
-        6160,
+        -3104,
         -528
       ],
-      "id": "6534fde3-0a80-4cb9-83dc-8c876173f1f0",
+      "id": "00c55f43-4ec0-4376-9a0d-e730eee071e1",
       "name": "Extract from CSV1"
     },
     {
@@ -51,10 +51,10 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        4592,
+        -4672,
         -528
       ],
-      "id": "6d4211ac-ce76-478d-be44-e89dabf6332e",
+      "id": "e15c699d-8636-4c0d-92ac-619da68b53f1",
       "name": "Loop Over Items1"
     },
     {
@@ -139,10 +139,10 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        5488,
+        -3776,
         -672
       ],
-      "id": "a7fcf9f2-78f7-474a-9ba6-ee75a1a11e02",
+      "id": "9c439fda-7f4c-4dc7-9deb-4f3b087d8987",
       "name": "Insert Document Metadata1",
       "executeOnce": true,
       "credentials": {
@@ -212,10 +212,10 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        6384,
+        -2880,
         -528
       ],
-      "id": "5d97a3cf-a479-4eb6-a4f0-5fb28de58e8e",
+      "id": "2f8c6b3c-1832-462c-8e20-e600a26a83d8",
       "name": "Insert Table Rows1",
       "credentials": {
         "postgres": {
@@ -306,10 +306,10 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        7328,
+        -1936,
         -400
       ],
-      "id": "ff43513a-ef9d-4706-8ba0-c0506a8dff23",
+      "id": "3db9a41e-8606-4203-b2db-ee92e26cb54d",
       "name": "Update Schema for Document Metadata1",
       "credentials": {
         "postgres": {
@@ -325,12 +325,12 @@
         "width": 1377,
         "color": 5
       },
-      "id": "a00b375c-4a43-4e19-830a-66dbc991093b",
+      "id": "91789442-64aa-4f6b-b5a5-50ab193c83c2",
       "name": "Sticky Note5",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        4112,
+        -5152,
         -1008
       ]
     },
@@ -350,12 +350,12 @@
           }
         }
       },
-      "id": "1719b496-9fc5-40ae-b59d-a693588b34d9",
+      "id": "a6b4f03a-5f5d-48ae-b577-f3b21c415a71",
       "name": "Download File",
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        5712,
+        -3552,
         -672
       ],
       "executeOnce": true,
@@ -371,12 +371,12 @@
         "operation": "text",
         "options": {}
       },
-      "id": "fb569ad5-f500-4155-a6dd-687655ba0e75",
+      "id": "2677bc78-f7fe-4007-89a2-41b70e2a80f8",
       "name": "Extract Document Text",
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
       "position": [
-        6144,
+        -3120,
         -368
       ],
       "alwaysOutputData": true
@@ -413,12 +413,12 @@
         },
         "options": {}
       },
-      "id": "6675430d-0ab2-4e44-9856-85daf6bbd209",
+      "id": "7ec52cc1-0db7-4133-b9af-9c4c80e25326",
       "name": "Set File ID",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        4816,
+        -4448,
         -672
       ]
     },
@@ -427,12 +427,12 @@
         "operation": "pdf",
         "options": {}
       },
-      "id": "c9efe9af-8fc2-4918-a629-c14d6f8ccf9e",
+      "id": "0b48882a-dbf7-470e-a691-a6e9f58414c9",
       "name": "Extract PDF Text",
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
       "position": [
-        6160,
+        -3104,
         -848
       ]
     },
@@ -441,12 +441,12 @@
         "aggregate": "aggregateAllItemData",
         "options": {}
       },
-      "id": "af4d2049-5be2-4d8a-b358-c796ede64388",
+      "id": "f540687c-c665-418f-a076-ec46376faf98",
       "name": "Aggregate",
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        6384,
+        -2880,
         -688
       ]
     },
@@ -462,12 +462,12 @@
         },
         "options": {}
       },
-      "id": "a5d3fe3a-2ff0-4d62-aaa2-6a589957a3a9",
+      "id": "d063a0cc-b39c-41f4-a59a-5dce70a3faae",
       "name": "Summarize",
       "type": "n8n-nodes-base.summarize",
       "typeVersion": 1,
       "position": [
-        6608,
+        -2656,
         -688
       ]
     },
@@ -594,12 +594,12 @@
           "fallbackOutput": "4"
         }
       },
-      "id": "be59f8b7-8c7f-4742-bfd0-6f6f32c0847f",
+      "id": "906c1ff4-2011-46ea-bef5-3888d8f0a7cd",
       "name": "Switch",
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3,
       "position": [
-        5936,
+        -3328,
         -704
       ]
     },
@@ -608,12 +608,12 @@
         "operation": "xlsx",
         "options": {}
       },
-      "id": "79943377-2f9b-486e-bf41-23e61382ec9f",
+      "id": "2ff5522c-9a22-4826-b9a6-c8fba4fdffde",
       "name": "Extract from Excel",
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
       "position": [
-        6160,
+        -3104,
         -688
       ]
     },
@@ -635,12 +635,12 @@
         "event": "fileCreated",
         "options": {}
       },
-      "id": "8942015c-9d11-427a-875e-364a9905ddb3",
+      "id": "314c94da-ab62-40c2-a238-6ff99d565917",
       "name": "File Created",
       "type": "n8n-nodes-base.googleDriveTrigger",
       "typeVersion": 1,
       "position": [
-        4368,
+        -4896,
         -624
       ],
       "credentials": {
@@ -668,12 +668,12 @@
         "event": "fileUpdated",
         "options": {}
       },
-      "id": "be1ff82b-9593-48ce-bc00-381cd32b6b0e",
+      "id": "095d2bc8-4362-4efe-8f97-3fe0e76c6870",
       "name": "File Updated",
       "type": "n8n-nodes-base.googleDriveTrigger",
       "typeVersion": 1,
       "position": [
-        4368,
+        -4896,
         -432
       ],
       "credentials": {
@@ -692,10 +692,10 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        5040,
+        -4224,
         -672
       ],
-      "id": "d235b96a-1867-46ed-ae5a-eaaea97d703a",
+      "id": "bb66abbc-f70a-4137-92fc-4cf2a809ed23",
       "name": "Delete Doc Rows (Postgres)",
       "credentials": {
         "postgres": {
@@ -710,12 +710,12 @@
         "query": "DELETE FROM document_rows WHERE dataset_id = '{{ $('Set File ID1').item.json.file_id }}';",
         "options": {}
       },
-      "id": "5b890c9c-8a66-4435-aef9-43cabe00b830",
+      "id": "17247ea4-d5af-403c-b4e3-272a36359555",
       "name": "Delete Old Data Rows (Postgres)1",
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2,
       "position": [
-        5264,
+        -4000,
         -672
       ],
       "credentials": {
@@ -734,10 +734,10 @@
       "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
       "typeVersion": 1,
       "position": [
-        6864,
+        -2400,
         -1008
       ],
-      "id": "e866b641-241a-4a64-b782-2c912c3257d9",
+      "id": "a215287f-d38f-4f4a-8c53-5b42212eb33d",
       "name": "Postgres PGVector Store",
       "credentials": {
         "postgres": {
@@ -753,10 +753,10 @@
       "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
       "typeVersion": 1,
       "position": [
-        6832,
+        -2432,
         -784
       ],
-      "id": "46f380c7-1501-4410-984b-a946395bc184",
+      "id": "32c06143-0d88-44d1-ac27-470dd3b7885e",
       "name": "Embeddings Google Gemini",
       "credentials": {
         "googlePalmApi": {
@@ -784,12 +784,12 @@
           }
         }
       },
-      "id": "d591ae4c-3196-4b60-9119-f0f69a653607",
+      "id": "f0e3e100-f6f5-4d35-b0e2-242dacb0ceea",
       "name": "Default Data Loader",
       "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
       "typeVersion": 1,
       "position": [
-        6960,
+        -2304,
         -784
       ]
     },
@@ -797,12 +797,12 @@
       "parameters": {
         "chunkOverlap": 100
       },
-      "id": "4d0f9694-0c0a-49ba-8ae7-13f898bcc7f3",
+      "id": "ae7af260-360d-4561-9d57-77344b19dd52",
       "name": "Character Text Splitter",
       "type": "@n8n/n8n-nodes-langchain.textSplitterCharacterTextSplitter",
       "typeVersion": 1,
       "position": [
-        7040,
+        -2224,
         -576
       ]
     },
@@ -815,11 +815,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        4736,
+        -4528,
         240
       ],
       "typeVersion": 1,
-      "id": "a537e6ee-e699-4917-80f7-c79b6029f59d",
+      "id": "8ca96687-0ad8-4b53-8e5c-85f4254ca8a6",
       "name": "Sticky Note6",
       "disabled": true
     },
@@ -832,10 +832,10 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        4992,
+        -4272,
         336
       ],
-      "id": "073c196c-d0df-47b9-9662-154e453d3b9a",
+      "id": "aca33d54-54ad-4a26-998a-713494c9c2d0",
       "name": "Create Document Metadata Table1",
       "credentials": {
         "postgres": {
@@ -854,10 +854,10 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        5216,
+        -4048,
         336
       ],
-      "id": "7285c79c-b559-405f-b529-5d65e5ee45b3",
+      "id": "c41ccd93-b3f8-4a54-850e-92bde4135940",
       "name": "Create Document Rows Table (for Tabular Data)1",
       "credentials": {
         "postgres": {
@@ -876,10 +876,10 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        4784,
+        -4480,
         336
       ],
-      "id": "677383f7-168b-4abf-b6db-1de11c896474",
+      "id": "3f15064c-8cc7-4c69-b786-39eac1667479",
       "name": "Create Documents Table and Match Function1",
       "credentials": {
         "postgres": {
@@ -894,12 +894,12 @@
         "operation": "html",
         "options": {}
       },
-      "id": "d84eac59-2fc7-4b47-8536-c6425bdd3e4d",
+      "id": "77cffe9c-3630-435c-b307-0d4be88405b0",
       "name": "Extract HTML1",
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
       "position": [
-        6160,
+        -3104,
         -992
       ]
     },
@@ -912,10 +912,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        1520,
+        -7744,
         -768
       ],
-      "id": "1adacff8-f19d-49c3-8470-d8c0773bc7e3",
+      "id": "662540a1-a7ca-49fd-a665-dfad145b9635",
       "name": "Webhook Entry",
       "webhookId": "PLACEHOLDER-WEBHOOK-ID"
     },
@@ -946,10 +946,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        1744,
+        -7520,
         -768
       ],
-      "id": "e0240759-c88e-4dcf-befe-dfd875aba518",
+      "id": "9c8d0201-f933-4621-a293-5a6457158ff7",
       "name": "Filter Message Events"
     },
     {
@@ -959,10 +959,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1968,
+        -7296,
         -768
       ],
-      "id": "2acb9213-1f1d-4cb3-80bd-32130fc48a82",
+      "id": "0063988d-3654-47d8-b061-9c787f5802b1",
       "name": "Message Processor"
     },
     {
@@ -972,10 +972,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3424,
+        -5840,
         -768
       ],
-      "id": "7f589ffd-0fd9-4628-9cb1-cdd5c2914422",
+      "id": "77c82308-f50f-4ac9-b8dd-831c920a0a34",
       "name": "Process AI Response"
     },
     {
@@ -1003,10 +1003,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        3648,
+        -5616,
         -768
       ],
-      "id": "6562f5fd-9ff3-4b84-b344-c9447b4d079d",
+      "id": "09c091b9-1f62-40df-bc7b-e4507e2405d0",
       "name": "Send Response to LINE"
     },
     {
@@ -1018,10 +1018,10 @@
       "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
       "typeVersion": 1.3,
       "position": [
-        2544,
+        -6720,
         -544
       ],
-      "id": "f226998e-59bc-4a19-b3f7-47231c2cde66",
+      "id": "d1e3f1c7-402c-4822-83fa-088ddf905659",
       "name": "Postgres Chat Memory",
       "credentials": {
         "postgres": {
@@ -1033,17 +1033,17 @@
     {
       "parameters": {
         "content": "## Agent Tools for RAG",
-        "height": 528.85546469693,
-        "width": 583.4552380860637,
+        "height": 385,
+        "width": 583,
         "color": 4
       },
-      "id": "a663e41e-9acf-4ef3-a585-57f597174bba",
+      "id": "d6977d76-b191-4705-b116-faeafd504bee",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        2896,
-        -720
+        -6240,
+        -624
       ]
     },
     {
@@ -1068,10 +1068,10 @@
       "type": "n8n-nodes-base.postgresTool",
       "typeVersion": 2.5,
       "position": [
-        2672,
+        -6592,
         -544
       ],
-      "id": "bab0e141-a808-473a-b081-9a9a20016570",
+      "id": "c2e6b6e6-a4f1-4363-a02a-cb0d44e2e963",
       "name": "List Documents",
       "credentials": {
         "postgres": {
@@ -1093,10 +1093,10 @@
       "type": "n8n-nodes-base.postgresTool",
       "typeVersion": 2.5,
       "position": [
-        2800,
+        -6464,
         -544
       ],
-      "id": "ce48967b-a793-4f37-9c87-14207fcddc07",
+      "id": "7383c26e-6ac2-4f0b-8c4e-2c552fbe63a7",
       "name": "Get File Contents",
       "credentials": {
         "postgres": {
@@ -1116,10 +1116,10 @@
       "type": "n8n-nodes-base.postgresTool",
       "typeVersion": 2.5,
       "position": [
-        2928,
+        -6336,
         -544
       ],
-      "id": "f04084be-efc8-490f-ba8d-dd22872a42de",
+      "id": "d46a11e9-1ffe-4945-922b-ce72c48af30e",
       "name": "Query Document Rows",
       "credentials": {
         "postgres": {
@@ -1140,10 +1140,10 @@
       "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
       "typeVersion": 1,
       "position": [
-        3056,
+        -6208,
         -544
       ],
-      "id": "c2fa1eda-d4d9-4f26-af63-21b1c779764e",
+      "id": "c92830d8-ea8f-4639-a078-a3692491a7e6",
       "name": "Postgres PGVector Store4",
       "credentials": {
         "postgres": {
@@ -1159,10 +1159,10 @@
       "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
       "typeVersion": 1,
       "position": [
-        3136,
-        -336
+        -6128,
+        -384
       ],
-      "id": "8538bddb-fa82-4379-b8b7-1df5537eb830",
+      "id": "47d7e4a7-f83d-4012-9f3e-b0c78b014fd7",
       "name": "Embeddings Google Gemini3",
       "credentials": {
         "googlePalmApi": {
@@ -1184,10 +1184,10 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
       "position": [
-        2416,
+        -6848,
         -544
       ],
-      "id": "4d96e4e6-308f-423b-8f6d-3d5598e59a3e",
+      "id": "cd8e08b9-da84-4b9c-9d17-27d0868ae5e8",
       "name": "OpenAI Chat Model",
       "credentials": {
         "openAiApi": {
@@ -1202,16 +1202,16 @@
         "text": "={{ $('Message Processor').item.json.processedText }}",
         "hasOutputParser": true,
         "options": {
-          "systemMessage": "=You are a helpful AI assistant. Please respond to the following message in the user's language.\n\n{% if $('Message Processor').item.json.isQuotedMessage %}\nNote: This message is a reply to a previous message (ID: {{ $('Message Processor').item.json.quotedMessageId }}). Please consider this context when responding.\n{% endif %}\n\nPlease provide a clear, helpful response in plain text without HTML formatting. Keep your response concise and under 1000 characters when possible, as this is for a mobile chat interface.\n\nYou are given tools to perform RAG in the 'documents' table, look up the documents available in your knowledge base in the 'document_metadata' table, extract all the text from a given document, and query the tabular files with SQL in the 'document_rows' table.\n\nAlways start by performing RAG unless the question requires a SQL query for tabular data (fetching a sum, finding a max, something a RAG lookup would be unreliable for). or if the user only want to chat, you doesn't need to find in RAG. If RAG doesn't help, then look at the documents that are available to you, find a few that you think would contain the answer, and then analyze those.\n\nAlways tell the user if you didn't find the answer. Don't make something up just to please them.\n\nIf possible provide source where the clause, section, and page."
+          "systemMessage": "=You are a helpful AI assistant. Please respond to the following message in the user's language.\n\n{% if $('Message Processor').item.json.isQuotedMessage %}\nNote: This message is a reply to a previous message (ID: {{ $('Message Processor').item.json.quotedMessageId }}). Please consider this context when responding.\n{% endif %}\n\nPlease provide a clear, helpful response in plain text without HTML formatting. Keep your response concise and under 1500 characters when possible, as this is for a mobile chat interface.\n\nYou are given tools to perform RAG in the 'documents' table, look up the documents available in your knowledge base in the 'document_metadata' table, extract all the text from a given document, and query the tabular files with SQL in the 'document_rows' table.\n\nAlways start by performing RAG unless the question only want to chat or you already confidient with your answer. If RAG doesn't help, then look at the documents that are available to you in your own knowledge, find a few that you think would contain the answer, and then analyze those.\n\nAlways tell the user if you didn't find the answer. Don't make something up just to please them.\n\nas last resort, you are provided a internet search tool, you can use it to help the user query\n\nIf possible provide source where the clause, section, and page."
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
       "position": [
-        2672,
+        -6592,
         -768
       ],
-      "id": "57997dc8-485f-4451-84d9-b1907f1ccde0",
+      "id": "f542da7f-ce68-4490-a3c3-cbd89411f372",
       "name": "AI Language Model2"
     },
     {
@@ -1239,10 +1239,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2240,
+        -7024,
         -672
       ],
-      "id": "522aa5ab-5e0d-4d5d-80aa-6679b31c9a9e",
+      "id": "e45cff44-32bc-4b56-84f0-fc8915abf960",
       "name": "Start Loading Animation1"
     },
     {
@@ -1257,11 +1257,55 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
       "position": [
-        2272,
-        -944
+        -6992,
+        -1104
       ],
-      "id": "4e41103d-df13-40ac-8f81-1a77550fa1b9",
+      "id": "7623134e-6df1-47f2-8993-0d5432c6053f",
       "name": "AI Language Model3"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "parasail-gpt-oss-20b-fast-mem0",
+          "mode": "list",
+          "cachedResultName": "parasail-gpt-oss-20b-fast-mem0"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -6992,
+        -912
+      ],
+      "id": "8a0ca033-9e11-4fd3-a1e1-b1d0bb6223fb",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "LLSLQ022WFYLNsgG",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
+      "typeVersion": 1,
+      "position": [
+        -6544,
+        -368
+      ],
+      "id": "079ba4d7-34c8-48f1-b192-d6ec292d09f7",
+      "name": "SerpAPI",
+      "credentials": {
+        "serpApi": {
+          "id": "db0ei71zQkEQjoUq",
+          "name": "SerpAPI account"
+        }
+      }
     }
   ],
   "connections": {
@@ -1593,7 +1637,7 @@
             "index": 0
           },
           {
-            "node": "AI Language Model2",
+            "node": "AI Language Model3",
             "type": "main",
             "index": 0
           }
@@ -1699,17 +1743,34 @@
         ]
       ]
     },
-    "Start Loading Animation1": {
-      "main": [
-        []
-      ]
-    },
     "AI Language Model3": {
       "main": [
         [
           {
             "node": "AI Language Model2",
             "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Language Model3",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SerpAPI": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Language Model2",
+            "type": "ai_tool",
             "index": 0
           }
         ]
