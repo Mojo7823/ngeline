@@ -89,12 +89,21 @@ This document provides a comprehensive breakdown of all node functions in the ng
   - SQL data analysis
 - **System Prompt**: Prioritizes RAG search, handles quoted messages
 
-#### 8. **OpenAI Chat Model** (`@n8n/n8n-nodes-langchain.lmChatOpenAi`)
+#### 8. **AI Guardian (Topic Classifier)** (`@n8n/n8n-nodes-langchain.agent`)
+- **Purpose**: To filter user queries and ensure they are on-topic before being passed to the main AI model.
+- **Function**: Uses a few-shot prompt to classify if a user's question is related to "cybersecurity", "robotics", "vendor products", or "standardization".
+- **Logic**:
+  - The prompt contains examples of in-scope and out-of-scope questions to guide the model.
+  - It receives the `messageText` from the `Message Processor` node.
+  - It outputs "true" if the topic is relevant, and "false" otherwise.
+- **Flow**: The output is used by a switch node to either pass the query to the main AI agent or to respond with a message indicating the question is out of scope.
+
+#### 9. **OpenAI Chat Model** (`@n8n/n8n-nodes-langchain.lmChatOpenAi`)
 - **Purpose**: OpenAI GPT integration for the AI agent
 - **Function**: Provides natural language processing capabilities
 - **Configuration**: Connected to OpenAI API with model selection
 
-#### 9. **Postgres Chat Memory** (`@n8n/n8n-nodes-langchain.memoryPostgresChat`)
+#### 10. **Postgres Chat Memory** (`@n8n/n8n-nodes-langchain.memoryPostgresChat`)
 - **Purpose**: Conversation memory management
 - **Function**: Stores and retrieves chat history for context
 - **Features**:

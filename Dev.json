@@ -1248,10 +1248,10 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "={{ $('Message Processor1').item.json.processedText }}",
+        "text": "={{ $('Message Processor').item.json.messageText }}",
         "hasOutputParser": true,
         "options": {
-          "systemMessage": "=You're cybersecurity guardian module.\nThere are two module, You (as Guardian, Guardian Node) and AI Node (next to you).\nThere will another entity named AI, you only read the user instruction, you no need to answer the question only pass the user question into AI node(except the user question is outside your rules)\nYou will read all the content of the user query.\n\nAs guardian, check the user chat with this rules:\n```\n1. The user can greet, ask what capabilites, version number, knowledgebase or any technical of this AI Node \n2. The question must cybersecurity,regulation,robotic based\n3. You (Guardian) not supposed to use any tool, only pass or reject the user query\n4.\n5. \n```\n\nAs guardian, you need to strictly follow the rules"
+          "systemMessage": "You are a topic classifier. Your task is to determine if the following user query is related to any of these topics: cybersecurity, robotics, vendor products, or standardization.\n\nHere are some examples of queries that are IN scope:\n- \"What are the latest trends in phishing attacks?\" (cybersecurity)\n- \"Can you explain the NIST cybersecurity framework?\" (standardization, cybersecurity)\n- \"Tell me about the capabilities of the UR5 robot arm.\" (robotics, vendor product)\n- \"What are the differences between ISO 27001 and SOC 2?\" (standardization)\n\nHere are some examples of queries that are OUT of scope:\n- \"What's the weather like today?\"\n- \"Can you tell me a joke?\"\n- \"Who won the world cup in 1998?\"\n\nUser Query:\n\"{{ $('Message Processor').item.json.messageText }}\"\n\nRespond with \"true\" if the query is related to any of the allowed topics, and \"false\" otherwise. Do not provide any other explanation or text."
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -1261,8 +1261,7 @@
         -944
       ],
       "id": "4e41103d-df13-40ac-8f81-1a77550fa1b9",
-      "name": "AI Language Model3",
-      "disabled": true
+      "name": "AI Language Model3"
     }
   ],
   "connections": {
