@@ -1,0 +1,592 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Message Processor1').item.json.processedText }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=You are a helpful AI assistant. Please respond to the following message in the user's language.\n\n{% if $('Message Processor1').item.json.isQuotedMessage %}\nNote: This message is a reply to a previous message (ID: {{ $('Message Processor1').item.json.quotedMessageId }}). Please consider this context when responding.\n{% endif %}\n\nPlease provide a clear, helpful response in plain text without HTML formatting. Keep your response concise and under 1500 characters when possible, as this is for a mobile chat interface.\n\nYou are given tools to perform RAG in the 'documents' table, look up the documents available in your knowledge base in the 'document_metadata' table, extract all the text from a given document, and query the tabular files with SQL in the 'document_rows' table.\n\nAlways start by performing RAG unless the question only want to chat or you already confidient with your answer. If RAG doesn't help, then look at the documents that are available to you in your own knowledge, find a few that you think would contain the answer, and then analyze those.\n\nAlways tell the user if you didn't find the answer. Don't make something up just to please them.\n\nas last resort, you are provided a internet search tool, you can use it to help the user query\n\nIf possible provide source where the clause, section, and page."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        -304,
+        -80
+      ],
+      "id": "09812598-9b7b-49d2-84c8-bca5c0541129",
+      "name": "AI Language Model2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.line.me/v2/bot/chat/loading/start",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer ozz/rBPtU+q4ZASsoAYkYuGqUfeHNak8Tu36kB9XSQ80KilpJqdRnf0c7tBpDdTdcLsvvEirfrifUlXYtcYNlWDRCP51uSrRf5kgRSP8djDE1Tb+emfVaQJgrdf+gMEWXDwHXE+vdQdQAC/FCd49xgdB04t89/1O/w1cDnyilFU="
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{JSON.stringify({\"chatId\": $json.userId, \"loadingSeconds\": 30})}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1104,
+        -64
+      ],
+      "id": "362fd742-57d5-4ed6-a8c5-5438a18ccf33",
+      "name": "Start Loading Animation1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Message Processor1').item.json.messageText }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are a topic classifier. Your task is to determine if the following user query is related to any of these topics: cybersecurity, robotics, vendor products, or standardization.\n\nHere are some examples of queries that are IN scope:\n- \"What are the latest trends in phishing attacks?\" (cybersecurity)\n- \"Can you explain the NIST cybersecurity framework?\" (standardization, cybersecurity)\n- \"Tell me about the capabilities of the UR5 robot arm.\" (robotics, vendor product)\n- \"What are the differences between ISO 27001 and SOC 2?\" (standardization)\n\nHere are some examples of queries that are OUT of scope:\n- \"What's the weather like today?\"\n- \"Can you tell me a joke?\"\n- \"Who won the world cup in 1998?\"\n\nUser Query:\n\"{{ $('Message Processor').item.json.messageText }}\"\n\nRespond with \"true\" if the query is related to any of the allowed topics, and \"false\" otherwise. Do not provide any other explanation or text."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        -928,
+        -64
+      ],
+      "id": "b701442e-af7d-4a70-96ac-da1c80662046",
+      "name": "AI Language Model3"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "parasail-gpt-oss-20b-fast-mem0",
+          "mode": "list",
+          "cachedResultName": "parasail-gpt-oss-20b-fast-mem0"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -928,
+        192
+      ],
+      "id": "1a43d7eb-c4b3-4787-9da6-cf38c8cf57c7",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "LLSLQ022WFYLNsgG",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        336
+      ],
+      "id": "b5f671f5-742b-412c-87bf-ac99a79a64ca",
+      "name": "SerpAPI",
+      "credentials": {
+        "serpApi": {
+          "id": "db0ei71zQkEQjoUq",
+          "name": "SerpAPI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "line-message",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1712,
+        -64
+      ],
+      "id": "10105dfd-fa87-4064-80b0-13bc001ce030",
+      "name": "Webhook Entry1",
+      "webhookId": "PLACEHOLDER-WEBHOOK-ID"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "filter-condition",
+              "leftValue": "={{ $json.body.events[0].type }}",
+              "rightValue": "message",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -1488,
+        -64
+      ],
+      "id": "247c94bc-b87d-412a-a7ac-bc79a59b0cec",
+      "name": "Filter Message Events1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Message Processing and Quote Handling System\nconst webhook = $input.first();\nconst userId = webhook.json.body.events[0].source.userId;\nconst messageText = webhook.json.body.events[0].message.text;\nconst messageId = webhook.json.body.events[0].message.id;\nconst replyToken = webhook.json.body.events[0].replyToken;\nconst timestamp = webhook.json.body.events[0].timestamp;\nconst quoteToken = webhook.json.body.events[0].message.quoteToken || null;\nconst quotedMessageId = webhook.json.body.events[0].message.quotedMessageId || null;\n\n// Create message object\nconst messageObj = {\n  userId,\n  messageId,\n  messageText,\n  replyToken,\n  timestamp,\n  quoteToken,\n  quotedMessageId,\n  processed: false,\n  createdAt: new Date().toISOString(),\n  // Check if this is a quoted message\n  isQuotedMessage: !!quotedMessageId,\n  // Format message for processing\n  processedText: quotedMessageId ? \n    `[Replying to message ID: ${quotedMessageId}] ${messageText}` : \n    messageText,\n  // Quote configuration - set to true if you want to quote every user message\n  shouldQuoteInResponse: true  // Change to false if you don't want quoting\n};\n\nreturn [{\n  json: messageObj\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1264,
+        -64
+      ],
+      "id": "0fc4e5c2-b739-4522-a0e6-8c6fa822c37b",
+      "name": "Message Processor1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const messageProcessor = $(\"Message Processor1\").item;\nconst aiAgent = $(\"AI Language Model2\").item;\n\nif (!messageProcessor?.json?.replyToken || !aiAgent?.json?.output) {\n  throw new Error(\"Missing necessary data, please check the output structure of the Message Processor & AI Agent nodes.\");\n}\n\n// Function to strip markdown formatting\nconst stripMarkdown = (text) => {\n  if (!text) return '';\n  return text\n     .replace(/\\*\\*([^*]+)\\*\\*/g, '$1') // Bold **text**\n     .replace(/__([^_]+)__/g, '$1')   // Bold __text__\n     .replace(/\\*([^*]+)\\*/g, '$1')      // Italic *text*\n     .replace(/_([^_]+)_/g, '$1')      // Italic _text_\n     .replace(/`([^`]+)`/g, '$1')      // Inline code `code`\n     .replace(/^\\s*[-*+]\\s+/gm, '')  // List items\n     .replace(/^\\s*\\d+\\.\\s+/gm, ''); // Numbered list items\n};\n\n// Function to truncate text to LINE's limit\nconst truncateText = (text, maxLength = 4900) => {\n  if (!text) return '';\n  if (text.length <= maxLength) return text;\n  \n  // Try to truncate at a sentence boundary\n  const truncated = text.substring(0, maxLength);\n  const lastSentence = truncated.lastIndexOf('.');\n  const lastQuestion = truncated.lastIndexOf('?');\n  const lastExclamation = truncated.lastIndexOf('!');\n  \n  const lastPunctuation = Math.max(lastSentence, lastQuestion, lastExclamation);\n  \n  if (lastPunctuation > maxLength * 0.8) {\n    // If we found punctuation in the last 20%, use it\n    return truncated.substring(0, lastPunctuation + 1);\n  } else {\n    // Otherwise, truncate at word boundary\n    const lastSpace = truncated.lastIndexOf(' ');\n    if (lastSpace > maxLength * 0.8) {\n      return truncated.substring(0, lastSpace) + '...';\n    } else {\n      return truncated.substring(0, maxLength - 3) + '...';\n    }\n  }\n};\n\nconst replyToken = messageProcessor.json.replyToken;\nconst rawText = aiAgent.json.output;\nconst cleanedText = stripMarkdown(rawText).trim();\nconst finalText = truncateText(cleanedText);\n\n// Validate text length (LINE limit is 5000 characters)\nif (finalText.length > 5000) {\n  throw new Error(`Message text too long: ${finalText.length} characters (max 5000)`);\n}\n\nif (finalText.length === 0) {\n  throw new Error('Message text is empty after processing');\n}\n\n// Prepare the message object for LINE API\nconst lineMessage = {\n  type: \"text\",\n  text: finalText\n};\n\n// Add quote token to quote the user's original message in the response\nif (messageProcessor.json.shouldQuoteInResponse && messageProcessor.json.quoteToken) {\n  lineMessage.quoteToken = messageProcessor.json.quoteToken;\n}\n\nreturn [\n  {\n    json: {\n      replyToken,\n      text: finalText,\n      originalText: cleanedText,\n      textLength: finalText.length,\n      wasTruncated: finalText.length < cleanedText.length,\n      originalMessageId: messageProcessor.json.messageId,\n      userId: messageProcessor.json.userId,\n      isQuotedResponse: messageProcessor.json.isQuotedMessage,\n      message: lineMessage\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        -64
+      ],
+      "id": "127d56c3-6538-41c9-a1f8-bc5eb153c30b",
+      "name": "Process AI Response1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.line.me/v2/bot/message/reply",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer ozz/rBPtU+q4ZASsoAYkYuGqUfeHNak8Tu36kB9XSQ80KilpJqdRnf0c7tBpDdTdcLsvvEirfrifUlXYtcYNlWDRCP51uSrRf5kgRSP8djDE1Tb+emfVaQJgrdf+gMEWXDwHXE+vdQdQAC/FCd49xgdB04t89/1O/w1cDnyilFU="
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{JSON.stringify({\"replyToken\":$json.replyToken,\"messages\":[$json.message]})}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        672,
+        -64
+      ],
+      "id": "6c2a3f09-33da-4727-98db-1e0fee6d8739",
+      "name": "Send Response to LINE1"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Message Processor1').item.json.userId }}",
+        "contextWindowLength": 50
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        -432,
+        160
+      ],
+      "id": "df80e631-5a2c-46e5-a744-1b3f90d094fd",
+      "name": "Postgres Chat Memory1",
+      "credentials": {
+        "postgres": {
+          "id": "TAaHQ3Rb6yhpUUWG",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Agent Tools for RAG",
+        "height": 385,
+        "width": 583,
+        "color": 4
+      },
+      "id": "e456d23c-4075-49d8-8c1a-33dbd11d39e6",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        48,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Use this tool to fetch all available documents, including the table schema if the file is a CSV or Excel file.",
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "document_metadata",
+          "mode": "list",
+          "cachedResultName": "document_metadata"
+        },
+        "returnAll": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.5,
+      "position": [
+        -304,
+        160
+      ],
+      "id": "b92aa11f-4ad5-4a97-ac59-48a2793a884d",
+      "name": "List Documents1",
+      "credentials": {
+        "postgres": {
+          "id": "TAaHQ3Rb6yhpUUWG",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Given a file ID, fetches the text from the document.",
+        "operation": "executeQuery",
+        "query": "SELECT \n    string_agg(content, ' ') as document_text\nFROM documents\n  WHERE metadata->>'file_id' = $1\nGROUP BY metadata->>'file_id';",
+        "options": {
+          "queryReplacement": "={{ $fromAI('file_id') }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.5,
+      "position": [
+        -176,
+        160
+      ],
+      "id": "6b9fd23f-f057-42c7-8843-dd39d6fbfe13",
+      "name": "Get File Contents1",
+      "credentials": {
+        "postgres": {
+          "id": "TAaHQ3Rb6yhpUUWG",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Run a SQL query - use this to query from the document_rows table once you know the file ID you are querying. dataset_id is the file_id and you are always using the row_data for filtering, which is a jsonb field that has all the keys from the file schema given in the document_metadata table.\n\nExample query:\n\nSELECT AVG((row_data->>'revenue')::numeric)\nFROM document_rows\nWHERE dataset_id = '123';\n\nExample query 2:\n\nSELECT \n    row_data->>'category' as category,\n    SUM((row_data->>'sales')::numeric) as total_sales\nFROM dataset_rows\nWHERE dataset_id = '123'\nGROUP BY row_data->>'category';",
+        "operation": "executeQuery",
+        "query": "{{ $fromAI('sql_query') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.5,
+      "position": [
+        -48,
+        160
+      ],
+      "id": "ae34f4fc-a60a-4440-b160-607e5f31d432",
+      "name": "Query Document Rows1",
+      "credentials": {
+        "postgres": {
+          "id": "TAaHQ3Rb6yhpUUWG",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolName": "documents",
+        "toolDescription": "Use RAG to look up information in the knowledgebase.",
+        "tableName": "documents",
+        "topK": 10,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
+      "typeVersion": 1,
+      "position": [
+        80,
+        160
+      ],
+      "id": "f70ce691-6c7d-412a-ab59-be05120c76fc",
+      "name": "Postgres PGVector Store5",
+      "credentials": {
+        "postgres": {
+          "id": "TAaHQ3Rb6yhpUUWG",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-embedding-exp-03-07"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        160,
+        320
+      ],
+      "id": "a5b41bc0-332f-428a-bcf1-8040697e767a",
+      "name": "Embeddings Google Gemini4",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "FgYWSkuKxYdiqJpG",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "parasail-kimi-k2-instruct",
+          "mode": "list",
+          "cachedResultName": "parasail-kimi-k2-instruct"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -560,
+        160
+      ],
+      "id": "b8d83f4b-dd60-4acc-937a-776baf799856",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "LLSLQ022WFYLNsgG",
+          "name": "OpenAi account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "AI Language Model2": {
+      "main": [
+        [
+          {
+            "node": "Process AI Response1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start Loading Animation1": {
+      "main": [
+        [
+          {
+            "node": "AI Language Model3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Language Model3": {
+      "main": [
+        [
+          {
+            "node": "AI Language Model2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Language Model3",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SerpAPI": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Language Model2",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook Entry1": {
+      "main": [
+        [
+          {
+            "node": "Filter Message Events1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Message Events1": {
+      "main": [
+        [
+          {
+            "node": "Message Processor1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message Processor1": {
+      "main": [
+        [
+          {
+            "node": "Start Loading Animation1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process AI Response1": {
+      "main": [
+        [
+          {
+            "node": "Send Response to LINE1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Language Model2",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Documents1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Language Model2",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get File Contents1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Language Model2",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Query Document Rows1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Language Model2",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres PGVector Store5": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Language Model2",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini4": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Postgres PGVector Store5",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Language Model2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateId": "3647",
+    "templateCredsSetupCompleted": true,
+    "instanceId": "22090f179de426b0139b50a048e86d0baab016d91123aee8279a90df0b31e8e9"
+  }
+}
