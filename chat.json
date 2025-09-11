@@ -6,16 +6,16 @@
         "text": "={{ $('Message Processor1').item.json.processedText }}",
         "hasOutputParser": true,
         "options": {
-          "systemMessage": "=You are a helpful AI assistant. Please respond to the following message in the user's language.\n\n{% if $('Message Processor1').item.json.isQuotedMessage %}\nNote: This message is a reply to a previous message (ID: {{ $('Message Processor1').item.json.quotedMessageId }}). Please consider this context when responding.\n{% endif %}\n\nPlease provide a clear, helpful response in plain text without HTML formatting. Keep your response concise and under 1500 characters when possible, as this is for a mobile chat interface.\n\nYou are given tools to perform RAG in the 'documents' table, look up the documents available in your knowledge base in the 'document_metadata' table, extract all the text from a given document, and query the tabular files with SQL in the 'document_rows' table.\n\nAlways start by performing RAG unless the question only want to chat or you already confidient with your answer. If RAG doesn't help, then look at the documents that are available to you in your own knowledge, find a few that you think would contain the answer, and then analyze those.\n\nAlways tell the user if you didn't find the answer. Don't make something up just to please them.\n\nas last resort, you are provided a internet search tool, you can use it to help the user query\n\nIf possible provide source where the clause, section, and page."
+          "systemMessage": "=You are a helpful AI assistant. Please respond to the following message in the only suppported language is english and 正體中文（台灣)\n\n{% if $('Message Processor1').item.json.isQuotedMessage %}\nNote: This message is a reply to a previous message (ID: {{ $('Message Processor1').item.json.quotedMessageId }}). Please consider this context when responding.\n{% endif %}\n\nPlease provide a clear, helpful response in plain text without HTML formatting. Keep your response concise and under 1500 characters when possible, as this is for a mobile chat interface.\n\nYou are given tools to perform RAG in the 'documents' table, look up the documents available in your knowledge base in the 'document_metadata' table, extract all the text from a given document.\n\nAlways start by performing RAG unless the question only want to chat or you already confidient with your answer. If RAG doesn't help, then look at the documents that are available to you in your own knowledge, find a few that you think would contain the answer, and then analyze those.\n\nAlways tell the user if you didn't find the answer. Don't make something up just to please them.\n\nas last resort, you are provided a internet search tool, you can use it to help the user query\n\nIf possible provide source where the clause, section, and page."
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
       "position": [
-        -304,
-        -80
+        0,
+        0
       ],
-      "id": "09812598-9b7b-49d2-84c8-bca5c0541129",
+      "id": "89dad6b0-d0be-4b10-8b82-49c11b56bb03",
       "name": "AI Language Model2"
     },
     {
@@ -31,7 +31,7 @@
             },
             {
               "name": "Authorization",
-              "value": "=Bearer ozz/rBPtU+q4ZASsoAYkYuGqUfeHNak8Tu36kB9XSQ80KilpJqdRnf0c7tBpDdTdcLsvvEirfrifUlXYtcYNlWDRCP51uSrRf5kgRSP8djDE1Tb+emfVaQJgrdf+gMEWXDwHXE+vdQdQAC/FCd49xgdB04t89/1O/w1cDnyilFU="
+              "value": "=Bearer gfcYxVbRNfh/mdSuuvY+q/uZ0xaG5op7CX3tlX7Ody6erDUWSoFuCGzAW/hrmd8d8XZlS86KP3JHrTZpYRdWPDJYbdU9oolr2Zc2tu1riM+xRtzaGS4O19yUIP3yIqG+PmPdQ+T2B9VgJKLMhT3bVQdB04t89/1O/w1cDnyilFU="
             }
           ]
         },
@@ -43,10 +43,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -1104,
-        -64
+        -800,
+        16
       ],
-      "id": "362fd742-57d5-4ed6-a8c5-5438a18ccf33",
+      "id": "7a180cd5-187c-4eae-9bc2-0e4c1a660924",
       "name": "Start Loading Animation1"
     },
     {
@@ -61,36 +61,12 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
       "position": [
-        -928,
-        -64
+        -576,
+        144
       ],
-      "id": "b701442e-af7d-4a70-96ac-da1c80662046",
-      "name": "AI Language Model3"
-    },
-    {
-      "parameters": {
-        "model": {
-          "__rl": true,
-          "value": "parasail-gpt-oss-20b-fast-mem0",
-          "mode": "list",
-          "cachedResultName": "parasail-gpt-oss-20b-fast-mem0"
-        },
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-      "typeVersion": 1.2,
-      "position": [
-        -928,
-        192
-      ],
-      "id": "1a43d7eb-c4b3-4787-9da6-cf38c8cf57c7",
-      "name": "OpenAI Chat Model1",
-      "credentials": {
-        "openAiApi": {
-          "id": "LLSLQ022WFYLNsgG",
-          "name": "OpenAi account"
-        }
-      }
+      "id": "1c70c2c6-e857-456b-a040-dfed4689f7e8",
+      "name": "AI Language Model3",
+      "disabled": true
     },
     {
       "parameters": {
@@ -99,10 +75,10 @@
       "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
       "typeVersion": 1,
       "position": [
-        -256,
-        336
+        48,
+        416
       ],
-      "id": "b5f671f5-742b-412c-87bf-ac99a79a64ca",
+      "id": "d9dba92a-b156-4b90-b770-c91a2d52fa26",
       "name": "SerpAPI",
       "credentials": {
         "serpApi": {
@@ -120,10 +96,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -1712,
-        -64
+        -1408,
+        16
       ],
-      "id": "10105dfd-fa87-4064-80b0-13bc001ce030",
+      "id": "b0cb732e-066b-4f2d-82be-f979a6ab9002",
       "name": "Webhook Entry1",
       "webhookId": "PLACEHOLDER-WEBHOOK-ID"
     },
@@ -154,10 +130,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        -1488,
-        -64
+        -1184,
+        16
       ],
-      "id": "247c94bc-b87d-412a-a7ac-bc79a59b0cec",
+      "id": "85922554-48cd-48c7-b90a-3425feacc94e",
       "name": "Filter Message Events1"
     },
     {
@@ -167,10 +143,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1264,
-        -64
+        -960,
+        16
       ],
-      "id": "0fc4e5c2-b739-4522-a0e6-8c6fa822c37b",
+      "id": "9a9ab0e0-8bc8-4b29-b27a-58b723701996",
       "name": "Message Processor1"
     },
     {
@@ -180,10 +156,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        448,
-        -64
+        752,
+        16
       ],
-      "id": "127d56c3-6538-41c9-a1f8-bc5eb153c30b",
+      "id": "95fbf09c-0d9b-4d0c-88a2-d5c01e7a0394",
       "name": "Process AI Response1"
     },
     {
@@ -199,7 +175,7 @@
             },
             {
               "name": "Authorization",
-              "value": "=Bearer ozz/rBPtU+q4ZASsoAYkYuGqUfeHNak8Tu36kB9XSQ80KilpJqdRnf0c7tBpDdTdcLsvvEirfrifUlXYtcYNlWDRCP51uSrRf5kgRSP8djDE1Tb+emfVaQJgrdf+gMEWXDwHXE+vdQdQAC/FCd49xgdB04t89/1O/w1cDnyilFU="
+              "value": "=Bearer gfcYxVbRNfh/mdSuuvY+q/uZ0xaG5op7CX3tlX7Ody6erDUWSoFuCGzAW/hrmd8d8XZlS86KP3JHrTZpYRdWPDJYbdU9oolr2Zc2tu1riM+xRtzaGS4O19yUIP3yIqG+PmPdQ+T2B9VgJKLMhT3bVQdB04t89/1O/w1cDnyilFU="
             }
           ]
         },
@@ -211,10 +187,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        672,
-        -64
+        976,
+        16
       ],
-      "id": "6c2a3f09-33da-4727-98db-1e0fee6d8739",
+      "id": "b5a97567-2d0c-4ff3-b804-6d6c29584c63",
       "name": "Send Response to LINE1"
     },
     {
@@ -226,10 +202,10 @@
       "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
       "typeVersion": 1.3,
       "position": [
-        -432,
-        160
+        -128,
+        240
       ],
-      "id": "df80e631-5a2c-46e5-a744-1b3f90d094fd",
+      "id": "1ccaca98-a540-436e-8475-a6134b834379",
       "name": "Postgres Chat Memory1",
       "credentials": {
         "postgres": {
@@ -245,13 +221,13 @@
         "width": 583,
         "color": 4
       },
-      "id": "e456d23c-4075-49d8-8c1a-33dbd11d39e6",
+      "id": "4fc437d1-d50a-421b-9513-d467329dfdac",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        48,
-        80
+        352,
+        160
       ]
     },
     {
@@ -276,10 +252,10 @@
       "type": "n8n-nodes-base.postgresTool",
       "typeVersion": 2.5,
       "position": [
-        -304,
-        160
+        0,
+        240
       ],
-      "id": "b92aa11f-4ad5-4a97-ac59-48a2793a884d",
+      "id": "6f49991e-93a9-47fc-a142-3f294be7d2ad",
       "name": "List Documents1",
       "credentials": {
         "postgres": {
@@ -293,7 +269,7 @@
         "descriptionType": "manual",
         "toolDescription": "Given a file ID, fetches the text from the document.",
         "operation": "executeQuery",
-        "query": "SELECT \n    string_agg(content, ' ') as document_text\nFROM documents\n  WHERE metadata->>'file_id' = $1\nGROUP BY metadata->>'file_id';",
+        "query": "SELECT \n    string_agg(text, ' ') as document_text\nFROM documents\n  WHERE metadata->>'file_id' = $1\nGROUP BY metadata->>'file_id';",
         "options": {
           "queryReplacement": "={{ $fromAI('file_id') }}"
         }
@@ -301,10 +277,10 @@
       "type": "n8n-nodes-base.postgresTool",
       "typeVersion": 2.5,
       "position": [
-        -176,
-        160
+        128,
+        240
       ],
-      "id": "6b9fd23f-f057-42c7-8843-dd39d6fbfe13",
+      "id": "d4008160-ab25-443c-b11e-7b1c7cd84144",
       "name": "Get File Contents1",
       "credentials": {
         "postgres": {
@@ -324,10 +300,10 @@
       "type": "n8n-nodes-base.postgresTool",
       "typeVersion": 2.5,
       "position": [
-        -48,
-        160
+        256,
+        240
       ],
-      "id": "ae34f4fc-a60a-4440-b160-607e5f31d432",
+      "id": "0c09001a-f401-4128-8167-5847ebf14aa2",
       "name": "Query Document Rows1",
       "credentials": {
         "postgres": {
@@ -348,10 +324,10 @@
       "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
       "typeVersion": 1,
       "position": [
-        80,
-        160
+        384,
+        240
       ],
-      "id": "f70ce691-6c7d-412a-ab59-be05120c76fc",
+      "id": "fa3fe2fc-65c1-483d-a6bc-8a73a558179b",
       "name": "Postgres PGVector Store5",
       "credentials": {
         "postgres": {
@@ -367,10 +343,10 @@
       "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
       "typeVersion": 1,
       "position": [
-        160,
-        320
+        464,
+        400
       ],
-      "id": "a5b41bc0-332f-428a-bcf1-8040697e767a",
+      "id": "22294785-b9b5-4f5b-8be0-37cdc5c98417",
       "name": "Embeddings Google Gemini4",
       "credentials": {
         "googlePalmApi": {
@@ -383,24 +359,49 @@
       "parameters": {
         "model": {
           "__rl": true,
-          "value": "parasail-kimi-k2-instruct",
+          "value": "accounts/fireworks/models/llama-v3p1-8b-instruct",
           "mode": "list",
-          "cachedResultName": "parasail-kimi-k2-instruct"
+          "cachedResultName": "accounts/fireworks/models/llama-v3p1-8b-instruct"
         },
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
       "position": [
-        -560,
-        160
+        -640,
+        256
       ],
-      "id": "b8d83f4b-dd60-4acc-937a-776baf799856",
-      "name": "OpenAI Chat Model2",
+      "id": "5e7fe1c5-738b-4a7c-a428-767d500a24da",
+      "name": "OpenAI Chat Model",
       "credentials": {
         "openAiApi": {
-          "id": "LLSLQ022WFYLNsgG",
-          "name": "OpenAi account"
+          "id": "1FXFlKkHMOgDBYDQ",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "accounts/fireworks/models/deepseek-v3p1",
+          "mode": "list",
+          "cachedResultName": "accounts/fireworks/models/deepseek-v3p1"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -240,
+        224
+      ],
+      "id": "c766de5c-f656-4202-b305-32f3f6994168",
+      "name": "OpenAI Chat Model3",
+      "credentials": {
+        "openAiApi": {
+          "id": "1FXFlKkHMOgDBYDQ",
+          "name": "OpenAi account 2"
         }
       }
     }
@@ -424,6 +425,11 @@
             "node": "AI Language Model3",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "AI Language Model2",
+            "type": "main",
+            "index": 0
           }
         ]
       ]
@@ -434,17 +440,6 @@
           {
             "node": "AI Language Model2",
             "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "OpenAI Chat Model1": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "AI Language Model3",
-            "type": "ai_languageModel",
             "index": 0
           }
         ]
@@ -571,7 +566,18 @@
         ]
       ]
     },
-    "OpenAI Chat Model2": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Language Model3",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model3": {
       "ai_languageModel": [
         [
           {
