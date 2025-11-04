@@ -23,10 +23,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        304,
-        288
+        3424,
+        272
       ],
-      "id": "a996536d-957b-43c0-a98e-365c9e98b50a",
+      "id": "b2d2d595-375b-450b-95d3-ba3074e8a634",
       "name": "Set Schema1"
     },
     {
@@ -36,10 +36,10 @@
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
       "position": [
-        -512,
-        160
+        2608,
+        144
       ],
-      "id": "4c98fe15-5151-40e8-8ba2-f89f12b06a7a",
+      "id": "a991712d-940f-4e74-b672-7b6eb2a6bd29",
       "name": "Extract from CSV1"
     },
     {
@@ -51,10 +51,10 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        -2080,
-        160
+        1040,
+        144
       ],
-      "id": "d57a6494-d85c-4043-a90c-e1155c0a3999",
+      "id": "f4d0796d-9dff-4fa5-9d62-2bae0f058552",
       "name": "Loop Over Items1"
     },
     {
@@ -139,15 +139,15 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        -1184,
-        16
+        1936,
+        -16
       ],
-      "id": "ce764feb-6ade-40fb-9946-e4940cd63fb0",
+      "id": "4923600c-d0dc-499a-ae63-4e49c656f6fb",
       "name": "Insert Document Metadata1",
       "executeOnce": true,
       "credentials": {
         "postgres": {
-          "id": "TAaHQ3Rb6yhpUUWG",
+          "id": "uAPlNaYsy8ebAniA",
           "name": "Postgres account"
         }
       }
@@ -212,14 +212,14 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        -288,
-        160
+        2832,
+        144
       ],
-      "id": "7a27f938-e5ad-4fb8-bf87-6db99cbb9367",
+      "id": "0532db33-ef46-4032-8b7a-04374fe8c49d",
       "name": "Insert Table Rows1",
       "credentials": {
         "postgres": {
-          "id": "TAaHQ3Rb6yhpUUWG",
+          "id": "uAPlNaYsy8ebAniA",
           "name": "Postgres account"
         }
       }
@@ -306,14 +306,14 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        656,
-        288
+        3776,
+        272
       ],
-      "id": "a6c5e680-8569-49ff-ba86-493ab04c97ab",
+      "id": "d8438598-f45d-4072-ac29-eb7810f92974",
       "name": "Update Schema for Document Metadata1",
       "credentials": {
         "postgres": {
-          "id": "TAaHQ3Rb6yhpUUWG",
+          "id": "uAPlNaYsy8ebAniA",
           "name": "Postgres account"
         }
       }
@@ -325,13 +325,13 @@
         "width": 1377,
         "color": 5
       },
-      "id": "96d1cfb4-6940-4d9b-87b2-0f7da0939468",
+      "id": "933cacd8-0fb0-49ca-87b0-773c79cdd8fa",
       "name": "Sticky Note5",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -2560,
-        -320
+        560,
+        -352
       ]
     },
     {
@@ -350,18 +350,18 @@
           }
         }
       },
-      "id": "586c59dc-5524-433f-9e16-a78f67cc5f1d",
+      "id": "c703272a-a137-4f92-a90e-be15da9b0f9c",
       "name": "Download File",
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        -960,
-        16
+        2160,
+        -16
       ],
       "executeOnce": true,
       "credentials": {
         "googleDriveOAuth2Api": {
-          "id": "lRFp7hyWF2i4GO7e",
+          "id": "3KFPn3tBBSPRGcvP",
           "name": "Google Drive account"
         }
       }
@@ -371,13 +371,13 @@
         "operation": "text",
         "options": {}
       },
-      "id": "016f6a44-a2fa-4847-85b6-bad4cef09de0",
+      "id": "349a2c71-f950-44aa-8320-1d8a1af17296",
       "name": "Extract Document Text",
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
       "position": [
-        -528,
-        320
+        2592,
+        304
       ],
       "alwaysOutputData": true
     },
@@ -413,13 +413,13 @@
         },
         "options": {}
       },
-      "id": "977086e3-fb28-4c9d-88f4-70699a32fc44",
+      "id": "dec0a9b8-09ff-4c20-a046-a6f917c7fdc1",
       "name": "Set File ID",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -1856,
-        16
+        1264,
+        -16
       ]
     },
     {
@@ -427,13 +427,13 @@
         "operation": "pdf",
         "options": {}
       },
-      "id": "4806c679-b9da-4229-a37f-fb795daf0be8",
+      "id": "322ac92b-b597-4db6-bdb9-90d7a67f6d2d",
       "name": "Extract PDF Text",
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
       "position": [
-        -512,
-        -160
+        2608,
+        -192
       ]
     },
     {
@@ -441,13 +441,13 @@
         "aggregate": "aggregateAllItemData",
         "options": {}
       },
-      "id": "fbb9a532-d7fa-4399-917e-1f7b64822c75",
+      "id": "b8c47330-351c-4349-8444-95cd9e722824",
       "name": "Aggregate",
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        -288,
-        0
+        2832,
+        -32
       ]
     },
     {
@@ -462,13 +462,13 @@
         },
         "options": {}
       },
-      "id": "db8fc120-b314-46ba-bf7e-6ce5eb554819",
+      "id": "0e137cc6-6f83-46b2-8335-be71f4335a3f",
       "name": "Summarize",
       "type": "n8n-nodes-base.summarize",
       "typeVersion": 1,
       "position": [
-        -64,
-        0
+        3056,
+        -32
       ]
     },
     {
@@ -594,13 +594,13 @@
           "fallbackOutput": "4"
         }
       },
-      "id": "83e4b9c3-5c68-4fe3-8bf1-86e7f6db3db3",
+      "id": "9ec53e00-9e46-445c-b0a2-64a4dc66ba59",
       "name": "Switch",
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3,
       "position": [
-        -736,
-        -16
+        2384,
+        -48
       ]
     },
     {
@@ -608,13 +608,13 @@
         "operation": "xlsx",
         "options": {}
       },
-      "id": "386622f4-cd0e-44aa-95a1-dd50b088db7b",
+      "id": "1519fb7b-6c95-4607-b485-43781576c2fc",
       "name": "Extract from Excel",
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
       "position": [
-        -512,
-        0
+        2608,
+        -32
       ]
     },
     {
@@ -635,17 +635,17 @@
         "event": "fileCreated",
         "options": {}
       },
-      "id": "c09c176e-7996-483f-a761-fe9493d7e79d",
+      "id": "6750d169-379c-4105-87de-674af6c08377",
       "name": "File Created",
       "type": "n8n-nodes-base.googleDriveTrigger",
       "typeVersion": 1,
       "position": [
-        -2304,
-        64
+        816,
+        48
       ],
       "credentials": {
         "googleDriveOAuth2Api": {
-          "id": "lRFp7hyWF2i4GO7e",
+          "id": "3KFPn3tBBSPRGcvP",
           "name": "Google Drive account"
         }
       }
@@ -668,17 +668,17 @@
         "event": "fileUpdated",
         "options": {}
       },
-      "id": "7e23ace3-c9d3-40e0-bdd0-6f2ef3a7a933",
+      "id": "1c18ead7-622f-4afb-8dd6-263f24f15c82",
       "name": "File Updated",
       "type": "n8n-nodes-base.googleDriveTrigger",
       "typeVersion": 1,
       "position": [
-        -2304,
-        256
+        816,
+        240
       ],
       "credentials": {
         "googleDriveOAuth2Api": {
-          "id": "lRFp7hyWF2i4GO7e",
+          "id": "3KFPn3tBBSPRGcvP",
           "name": "Google Drive account"
         }
       }
@@ -692,14 +692,14 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        -1632,
-        16
+        1488,
+        -16
       ],
-      "id": "b3edf761-ce44-4225-97e9-867bf64af3c7",
+      "id": "87475fda-ef36-40d3-9b69-ca9f90444b39",
       "name": "Delete Doc Rows (Postgres)",
       "credentials": {
         "postgres": {
-          "id": "TAaHQ3Rb6yhpUUWG",
+          "id": "uAPlNaYsy8ebAniA",
           "name": "Postgres account"
         }
       }
@@ -710,17 +710,17 @@
         "query": "DELETE FROM document_rows WHERE dataset_id = '{{ $('Set File ID').item.json.file_id }}';",
         "options": {}
       },
-      "id": "70c2dbc5-47fb-4fef-939d-829a807c8a61",
+      "id": "f561e25a-5c94-4ad2-9917-eafdd5854d20",
       "name": "Delete Old Data Rows (Postgres)1",
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2,
       "position": [
-        -1408,
-        16
+        1712,
+        -16
       ],
       "credentials": {
         "postgres": {
-          "id": "TAaHQ3Rb6yhpUUWG",
+          "id": "uAPlNaYsy8ebAniA",
           "name": "Postgres account"
         }
       }
@@ -734,33 +734,33 @@
       "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
       "typeVersion": 1,
       "position": [
-        192,
-        -320
+        3312,
+        -352
       ],
-      "id": "7f4bf4f2-9e2b-47e1-8c72-83aba5a34dc8",
+      "id": "e6956010-5d01-42c3-b132-07e81d359131",
       "name": "Postgres PGVector Store",
       "credentials": {
         "postgres": {
-          "id": "TAaHQ3Rb6yhpUUWG",
+          "id": "uAPlNaYsy8ebAniA",
           "name": "Postgres account"
         }
       }
     },
     {
       "parameters": {
-        "modelName": "models/gemini-embedding-exp-03-07"
+        "modelName": "models/embedding-001"
       },
       "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
       "typeVersion": 1,
       "position": [
-        160,
-        -96
+        3280,
+        -128
       ],
-      "id": "27d29c6a-7ff1-4e37-8d0f-720d04e35ee8",
+      "id": "38f742d7-5c2c-4fef-a0cc-36016c446861",
       "name": "Embeddings Google Gemini",
       "credentials": {
         "googlePalmApi": {
-          "id": "FgYWSkuKxYdiqJpG",
+          "id": "32bPIi6DQUfKBjyy",
           "name": "Google Gemini(PaLM) Api account"
         }
       }
@@ -784,26 +784,26 @@
           }
         }
       },
-      "id": "898ec9e1-1d15-423d-bb7f-ef2a86b22f40",
+      "id": "dc88f9c0-4a06-4628-a55e-364a1f1f6982",
       "name": "Default Data Loader",
       "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
       "typeVersion": 1,
       "position": [
-        288,
-        -96
+        3408,
+        -128
       ]
     },
     {
       "parameters": {
         "chunkOverlap": 100
       },
-      "id": "ce5ffff7-e993-4fee-9dca-1bbced73c7c7",
+      "id": "6fa07505-2b3b-4d72-8763-676ee04a185c",
       "name": "Character Text Splitter",
       "type": "@n8n/n8n-nodes-langchain.textSplitterCharacterTextSplitter",
       "typeVersion": 1,
       "position": [
-        368,
-        112
+        3488,
+        96
       ]
     },
     {
@@ -811,13 +811,13 @@
         "operation": "html",
         "options": {}
       },
-      "id": "c0cc4d3e-aa6c-4dce-a79c-2a1559941cb0",
+      "id": "af17115f-d57b-473b-abaa-351b09d0e3c5",
       "name": "Extract HTML1",
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
       "position": [
-        -512,
-        -304
+        2608,
+        -336
       ]
     },
     {
@@ -829,12 +829,13 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -1872,
-        240
+        1360,
+        1296
       ],
       "typeVersion": 1,
-      "id": "709035d9-f023-4382-8f0b-1b59314c87dd",
-      "name": "Sticky Note3"
+      "id": "0727fa01-cf61-4349-8ec3-c5844a632170",
+      "name": "Sticky Note3",
+      "disabled": true
     },
     {
       "parameters": {
@@ -845,14 +846,14 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        -1616,
-        336
+        1616,
+        1392
       ],
-      "id": "0cf93e00-01be-4626-82a9-e767bf19a616",
+      "id": "8de7328e-bafb-4c62-929c-b77e6ea104df",
       "name": "Create Document Metadata Table",
       "credentials": {
         "postgres": {
-          "id": "TAaHQ3Rb6yhpUUWG",
+          "id": "uAPlNaYsy8ebAniA",
           "name": "Postgres account"
         }
       },
@@ -867,14 +868,14 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        -1392,
-        336
+        1840,
+        1392
       ],
-      "id": "1ed5c188-3e5c-416c-8cd1-a929fd4aafb0",
+      "id": "3f83785a-0eec-4618-bf88-2724f95bcc73",
       "name": "Create Document Rows Table (for Tabular Data)",
       "credentials": {
         "postgres": {
-          "id": "TAaHQ3Rb6yhpUUWG",
+          "id": "uAPlNaYsy8ebAniA",
           "name": "Postgres account"
         }
       },
@@ -883,20 +884,20 @@
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "-- Enable the pgvector extension to work with embedding vectors\ncreate extension vector;\n\n-- Create a table to store your documents\ncreate table documents (\n  id bigserial primary key,\n  content text, -- corresponds to Document.pageContent\n  metadata jsonb, -- corresponds to Document.metadata\n  embedding vector(1536) -- 1536 works for OpenAI embeddings, change if needed\n);\n\n-- Create a function to search for documents\ncreate function match_documents (\n  query_embedding vector(1536),\n  match_count int default null,\n  filter jsonb DEFAULT '{}'\n) returns table (\n  id bigint,\n  content text,\n  metadata jsonb,\n  similarity float\n)\nlanguage plpgsql\nas $$\n#variable_conflict use_column\nbegin\n  return query\n  select\n    id,\n    content,\n    metadata,\n    1 - (documents.embedding <=> query_embedding) as similarity\n  from documents\n  where metadata @> filter\n  order by documents.embedding <=> query_embedding\n  limit match_count;\nend;\n$$;",
+        "query": "-- Enable the pgvector extension to work with embedding vectors\ncreate extension vector;\n\n-- Create a table to store your documents\ncreate table documents (\n  id bigserial primary key,\n  content text, -- corresponds to Document.pageContent\n  metadata jsonb, -- corresponds to Document.metadata\n  embedding vector(768) -- 1536 works for OpenAI embeddings, change if needed\n);\n\n-- Create a function to search for documents\ncreate function match_documents (\n  query_embedding vector(1536),\n  match_count int default null,\n  filter jsonb DEFAULT '{}'\n) returns table (\n  id bigint,\n  content text,\n  metadata jsonb,\n  similarity float\n)\nlanguage plpgsql\nas $$\n#variable_conflict use_column\nbegin\n  return query\n  select\n    id,\n    content,\n    metadata,\n    1 - (documents.embedding <=> query_embedding) as similarity\n  from documents\n  where metadata @> filter\n  order by documents.embedding <=> query_embedding\n  limit match_count;\nend;\n$$;",
         "options": {}
       },
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        -1824,
-        336
+        1408,
+        1392
       ],
-      "id": "5fe8ccd9-0e3f-4d21-8371-79ab3fcd7374",
+      "id": "be81bf4f-b89d-4841-a553-3bab4dfb5079",
       "name": "Create Documents Table and Match Function",
       "credentials": {
         "postgres": {
-          "id": "TAaHQ3Rb6yhpUUWG",
+          "id": "uAPlNaYsy8ebAniA",
           "name": "Postgres account"
         }
       },
@@ -1204,6 +1205,7 @@
   },
   "pinData": {},
   "meta": {
-    "instanceId": "22090f179de426b0139b50a048e86d0baab016d91123aee8279a90df0b31e8e9"
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6f55c6c26019d6bb3f208b12d13f9477c79d471cb1ff372dfc844c5d536dd8c4"
   }
 }
