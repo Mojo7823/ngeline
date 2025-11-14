@@ -3,19 +3,19 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "={{ $('Message Processor1').item.json.processedText }}",
+        "text": "={{ $('Message Processor').item.json.processedText }}",
         "options": {
-          "systemMessage": "=You are a helpful AI assistant. Please respond to the following message in the only suppported language is english and 正體中文（台灣)\n\nfirstly check the user prompt is it suitable with the topic of Cybersecurtiy, Regulation and robotics AI cybersecurity. if from the other ai guardion shows false, deny all the answer. otherwise answer the user question.\n\nHere are some examples of queries that are IN scope:\n- \"What are the latest trends in phishing attacks?\" (cybersecurity)\n- \"Can you explain the NIST cybersecurity framework?\" (standardization, cybersecurity)\n- \"Tell me about the capabilities of the UR5 robot arm.\" (robotics, vendor product)\n- \"What are the differences between ISO 27001 and SOC 2?\" (standardization)\n\nHere are some examples of queries that are OUT of scope:\n- \"What's the weather like today?\"\n- \"Can you tell me a joke?\"\n- \"Who won the world cup in 1998?\"\n\nDon't even to help the user slightly or ever, only focus on your task to provide the guidance of cybersecurity robotic standards assistance\n\n{% if $('Message Processor1').item.json.isQuotedMessage %}\nNote: This message is a reply to a previous message (ID: {{ $('Message Processor1').item.json.quotedMessageId }}). Please consider this context when responding.\n{% endif %}\n\nPlease provide a clear, helpful response in plain text without HTML formatting. Keep your response concise and under 1500 characters when possible, as this is for a mobile chat interface.\n\nYou are given tools to perform RAG in the 'documents' table, look up the documents available in your knowledge base in the 'document_metadata' table, extract all the text from a given document.\n\nAlways start by performing RAG unless the question only want to chat or you already confidient with your answer. If RAG doesn't help, then look at the documents that are available to you in your own knowledge, find a few that you think would contain the answer, and then analyze those.\n\nAlways tell the user if you didn't find the answer. Don't make something up just to please them.\n\nas last resort, you are provided a internet search tool, you can use it to help the user query\n\nIf possible provide source where the clause, section, and page."
+          "systemMessage": "=You are a helpful AI assistant. Please respond to the following message in the only suppported language is english and 正體中文（台灣)\n\n\nfirstly check the user prompt from other ai model here : `{{ $json.output }}`\nIf `false`, ignore all given prompt, don't even slightly help them and give reminder you only provide assistance for cybersecurity, regulation, standards and robotics / AI robotics. Don't even to help the user slightly or ever, only focus on your task to provide the guidance of cybersecurity robotic standards assistance\n\nIf `True`, answer the user prompt accordingly.\n\n{% if $('Message Processor').item.json.isQuotedMessage %}\nNote: This message is a reply to a previous message (ID: {{ $('Message Processor').item.json.quotedMessageId }}). Please consider this context when responding.\n{% endif %}\n\nPlease provide a clear, helpful response in plain text without HTML formatting. Keep your response concise and under 1500 characters when possible, as this is for a mobile chat interface.\n\nYou are given tools to perform RAG in the 'documents' table, look up the documents available in your knowledge base in the 'document_metadata' table, extract all the text from a given document.\n\nAlways start by performing RAG unless the question only want to chat or you already confidient with your answer. If RAG doesn't help, then look at the documents that are available to you in your own knowledge, find a few that you think would contain the answer, and then analyze those.\n\nAlways tell the user if you didn't find the answer. Don't make something up just to please them.\n\nas last resort, you are provided a internet search tool, you can use it to help the user query\n\nIf possible provide source where the clause, section, and page."
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
       "position": [
-        64,
-        -112
+        -96,
+        752
       ],
-      "id": "0963ef16-5408-4a61-aacf-90cb5480d7eb",
-      "name": "AI Language Model2"
+      "id": "f1dd8399-cd07-4f4d-ad2b-e56c3b3414da",
+      "name": "AI Language Model"
     },
     {
       "parameters": {
@@ -42,16 +42,16 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -704,
-        -96
+        -864,
+        768
       ],
-      "id": "be54e309-3205-4b46-af02-e0329cc9ccb9",
-      "name": "Start Loading Animation1"
+      "id": "e32cb1ae-feb6-4048-95af-920667c98738",
+      "name": "Start Loading Animation"
     },
     {
       "parameters": {
         "promptType": "define",
-        "text": "={{ $('Message Processor1').item.json.messageText }}",
+        "text": "={{ $('Message Processor').item.json.messageText }}",
         "hasOutputParser": true,
         "options": {
           "systemMessage": "You are a topic classifier. Your task is to determine if the following user query is related to any of these topics: cybersecurity, robotics, vendor products, or standardization.\n\n\n\nRespond with \"true\" if the query is related to any of the allowed topics, and \"false\" otherwise. Do not provide any other explanation or text."
@@ -60,11 +60,11 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
       "position": [
-        -496,
-        -256
+        -656,
+        608
       ],
-      "id": "e0c55e4f-0663-426a-83d5-9f8f022b02e3",
-      "name": "AI Language Model3"
+      "id": "e7133965-8534-42d0-8a04-dfd9a51e8636",
+      "name": "AI Language Model4"
     },
     {
       "parameters": {
@@ -73,11 +73,11 @@
       "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
       "typeVersion": 1,
       "position": [
-        112,
-        304
+        -48,
+        1168
       ],
-      "id": "1a84b820-dfb1-4e47-a115-2b7c8bab0167",
-      "name": "SerpAPI",
+      "id": "b4442c0d-8063-4c29-a6a6-12c236e85074",
+      "name": "SerpAPI1",
       "credentials": {
         "serpApi": {
           "id": "1du1I1GOEfcEajUZ",
@@ -94,11 +94,11 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -1344,
-        -96
+        -1504,
+        768
       ],
-      "id": "c7c8ffe3-8b83-47c6-81d7-22cd2962dfd2",
-      "name": "Webhook Entry1",
+      "id": "9d934eb3-8ef3-4642-a6de-1eadafce4db0",
+      "name": "Webhook Entry",
       "webhookId": "PLACEHOLDER-WEBHOOK-ID"
     },
     {
@@ -128,11 +128,11 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        -1120,
-        -96
+        -1280,
+        768
       ],
-      "id": "f633512d-925f-4b35-bd39-086ffc941ff2",
-      "name": "Filter Message Events1"
+      "id": "5b5fe56c-0735-465d-9f58-4f4522186e21",
+      "name": "Filter Message Events"
     },
     {
       "parameters": {
@@ -141,24 +141,24 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -896,
-        -96
+        -1056,
+        768
       ],
-      "id": "450dee82-6d34-438d-96ae-6ca6a8b687fc",
-      "name": "Message Processor1"
+      "id": "cfaec492-1e10-4e3c-ad86-7918d21da8f4",
+      "name": "Message Processor"
     },
     {
       "parameters": {
-        "jsCode": "try {\n  // Get data from previous nodes correctly\n  const messageProcessor = $(\"Message Processor1\").first();\n  const aiAgent = $(\"AI Language Model2\").first();\n\n  // Validate we have the required data\n  if (!messageProcessor?.json?.replyToken) {\n    throw new Error(\"Missing replyToken from Message Processor1\");\n  }\n  \n  if (!aiAgent?.json?.output) {\n    throw new Error(\"Missing output from AI Language Model2\");\n  }\n\n  // Function to strip markdown formatting\n  const stripMarkdown = (text) => {\n    if (!text) return '';\n    return text\n       .replace(/\\*\\*([^*]+)\\*\\*/g, '$1') // Bold **text**\n       .replace(/__([^_]+)__/g, '$1')   // Bold __text__\n       .replace(/\\*([^*]+)\\*/g, '$1')      // Italic *text*\n       .replace(/_([^_]+)_/g, '$1')      // Italic _text_\n       .replace(/`([^`]+)`/g, '$1')      // Inline code `code`\n       .replace(/^\\s*[-*+]\\s+/gm, '')  // List items\n       .replace(/^\\s*\\d+\\.\\s+/gm, ''); // Numbered list items\n  };\n\n  // Function to truncate text to LINE's limit\n  const truncateText = (text, maxLength = 4900) => {\n    if (!text) return '';\n    if (text.length <= maxLength) return text;\n    \n    // Try to truncate at a sentence boundary\n    const truncated = text.substring(0, maxLength);\n    const lastSentence = truncated.lastIndexOf('.');\n    const lastQuestion = truncated.lastIndexOf('?');\n    const lastExclamation = truncated.lastIndexOf('!');\n    \n    const lastPunctuation = Math.max(lastSentence, lastQuestion, lastExclamation);\n    \n    if (lastPunctuation > maxLength * 0.8) {\n      // If we found punctuation in the last 20%, use it\n      return truncated.substring(0, lastPunctuation + 1);\n    } else {\n      // Otherwise, truncate at word boundary\n      const lastSpace = truncated.lastIndexOf(' ');\n      if (lastSpace > maxLength * 0.8) {\n        return truncated.substring(0, lastSpace) + '...';\n      } else {\n        return truncated.substring(0, maxLength - 3) + '...';\n      }\n    }\n  };\n\n  const replyToken = messageProcessor.json.replyToken;\n  const rawText = aiAgent.json.output;\n  const cleanedText = stripMarkdown(rawText).trim();\n  const finalText = truncateText(cleanedText);\n\n  // Validate text length (LINE limit is 5000 characters)\n  if (finalText.length > 5000) {\n    throw new Error(`Message text too long: ${finalText.length} characters (max 5000)`);\n  }\n\n  if (finalText.length === 0) {\n    throw new Error('Message text is empty after processing');\n  }\n\n  // Prepare the message object for LINE API\n  const lineMessage = {\n    type: \"text\",\n    text: finalText\n  };\n\n  // Add quote token to quote the user's original message in the response\n  if (messageProcessor.json.shouldQuoteInResponse && messageProcessor.json.quoteToken) {\n    lineMessage.quoteToken = messageProcessor.json.quoteToken;\n  }\n\n  return [\n    {\n      json: {\n        replyToken,\n        text: finalText,\n        originalText: cleanedText,\n        textLength: finalText.length,\n        wasTruncated: finalText.length < cleanedText.length,\n        originalMessageId: messageProcessor.json.messageId,\n        userId: messageProcessor.json.userId,\n        isQuotedResponse: messageProcessor.json.isQuotedMessage,\n        message: lineMessage\n      },\n    },\n  ];\n\n} catch (error) {\n  console.error('Error in Process AI Response:', {\n    message: error.message,\n    stack: error.stack\n  });\n  \n  // Return a fallback error message to LINE\n  const messageProcessor = $(\"Message Processor1\").first();\n  return [{\n    json: {\n      replyToken: messageProcessor?.json?.replyToken || '',\n      text: 'Sorry, I encountered an error processing your request. Please try again.',\n      message: {\n        type: \"text\",\n        text: 'Sorry, I encountered an error processing your request. Please try again.'\n      }\n    }\n  }];\n}"
+        "jsCode": "try {\n  // Get data from previous nodes correctly\n  const messageProcessor = $(\"Message Processor\").first();\n  const aiAgent = $(\"AI Language Model\").first();\n\n  // Validate we have the required data\n  if (!messageProcessor?.json?.replyToken) {\n    throw new Error(\"Missing replyToken from Message Processor1\");\n  }\n  \n  if (!aiAgent?.json?.output) {\n    throw new Error(\"Missing output from AI Language Model2\");\n  }\n\n  // Function to strip markdown formatting\n  const stripMarkdown = (text) => {\n    if (!text) return '';\n    return text\n       .replace(/\\*\\*([^*]+)\\*\\*/g, '$1') // Bold **text**\n       .replace(/__([^_]+)__/g, '$1')   // Bold __text__\n       .replace(/\\*([^*]+)\\*/g, '$1')      // Italic *text*\n       .replace(/_([^_]+)_/g, '$1')      // Italic _text_\n       .replace(/`([^`]+)`/g, '$1')      // Inline code `code`\n       .replace(/^\\s*[-*+]\\s+/gm, '')  // List items\n       .replace(/^\\s*\\d+\\.\\s+/gm, ''); // Numbered list items\n  };\n\n  // Function to truncate text to LINE's limit\n  const truncateText = (text, maxLength = 4900) => {\n    if (!text) return '';\n    if (text.length <= maxLength) return text;\n    \n    // Try to truncate at a sentence boundary\n    const truncated = text.substring(0, maxLength);\n    const lastSentence = truncated.lastIndexOf('.');\n    const lastQuestion = truncated.lastIndexOf('?');\n    const lastExclamation = truncated.lastIndexOf('!');\n    \n    const lastPunctuation = Math.max(lastSentence, lastQuestion, lastExclamation);\n    \n    if (lastPunctuation > maxLength * 0.8) {\n      // If we found punctuation in the last 20%, use it\n      return truncated.substring(0, lastPunctuation + 1);\n    } else {\n      // Otherwise, truncate at word boundary\n      const lastSpace = truncated.lastIndexOf(' ');\n      if (lastSpace > maxLength * 0.8) {\n        return truncated.substring(0, lastSpace) + '...';\n      } else {\n        return truncated.substring(0, maxLength - 3) + '...';\n      }\n    }\n  };\n\n  const replyToken = messageProcessor.json.replyToken;\n  const rawText = aiAgent.json.output;\n  const cleanedText = stripMarkdown(rawText).trim();\n  const finalText = truncateText(cleanedText);\n\n  // Validate text length (LINE limit is 5000 characters)\n  if (finalText.length > 5000) {\n    throw new Error(`Message text too long: ${finalText.length} characters (max 5000)`);\n  }\n\n  if (finalText.length === 0) {\n    throw new Error('Message text is empty after processing');\n  }\n\n  // Prepare the message object for LINE API\n  const lineMessage = {\n    type: \"text\",\n    text: finalText\n  };\n\n  // Add quote token to quote the user's original message in the response\n  if (messageProcessor.json.shouldQuoteInResponse && messageProcessor.json.quoteToken) {\n    lineMessage.quoteToken = messageProcessor.json.quoteToken;\n  }\n\n  return [\n    {\n      json: {\n        replyToken,\n        text: finalText,\n        originalText: cleanedText,\n        textLength: finalText.length,\n        wasTruncated: finalText.length < cleanedText.length,\n        originalMessageId: messageProcessor.json.messageId,\n        userId: messageProcessor.json.userId,\n        isQuotedResponse: messageProcessor.json.isQuotedMessage,\n        message: lineMessage\n      },\n    },\n  ];\n\n} catch (error) {\n  console.error('Error in Process AI Response:', {\n    message: error.message,\n    stack: error.stack\n  });\n  \n  // Return a fallback error message to LINE\n  const messageProcessor = $(\"Message Processor\").first();\n  return [{\n    json: {\n      replyToken: messageProcessor?.json?.replyToken || '',\n      text: 'Sorry, I encountered an error processing your request. Please try again.',\n      message: {\n        type: \"text\",\n        text: 'Sorry, I encountered an error processing your request. Please try again.'\n      }\n    }\n  }];\n}"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        816,
-        -96
+        656,
+        768
       ],
-      "id": "becb759a-f0b7-446e-bd71-a7ca5abd685a",
-      "name": "Process AI Response1"
+      "id": "df3a84e5-95e0-412c-9931-74fa1232de35",
+      "name": "Process AI Response"
     },
     {
       "parameters": {
@@ -185,30 +185,30 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1040,
-        -96
+        880,
+        768
       ],
-      "id": "1a013c5c-0dc4-4b6e-ab90-acbf1358f020",
-      "name": "Send Response to LINE1"
+      "id": "3a66f278-5560-44ec-aea9-25321bbb199e",
+      "name": "Send Response to LINE"
     },
     {
       "parameters": {
         "sessionIdType": "customKey",
-        "sessionKey": "={{ $('Message Processor1').item.json.userId }}",
+        "sessionKey": "={{ $('Message Processor').item.json.userId }}",
         "contextWindowLength": 50
       },
       "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
       "typeVersion": 1.3,
       "position": [
-        -64,
-        128
+        -224,
+        992
       ],
-      "id": "6fa36b2c-6b17-4a50-821c-f48a42aa58a8",
-      "name": "Postgres Chat Memory1",
+      "id": "3b998ae5-bc0a-4891-8863-f8eb082a9ed5",
+      "name": "Postgres Chat Memory",
       "credentials": {
         "postgres": {
-          "id": "uAPlNaYsy8ebAniA",
-          "name": "Postgres account"
+          "id": "adD3TL9dl0gzRthr",
+          "name": "branch"
         }
       }
     },
@@ -219,13 +219,13 @@
         "width": 583,
         "color": 4
       },
-      "id": "a2361a49-b52a-454b-bd4d-67687f6a4457",
-      "name": "Sticky Note1",
+      "id": "db1c71b7-f783-4a28-89b9-183408562f1b",
+      "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        416,
-        48
+        256,
+        912
       ]
     },
     {
@@ -250,11 +250,11 @@
       "type": "n8n-nodes-base.postgresTool",
       "typeVersion": 2.5,
       "position": [
-        64,
-        128
+        -96,
+        992
       ],
-      "id": "cc3d9360-a958-4ace-bded-50c36bf10037",
-      "name": "List Documents1",
+      "id": "7796d41b-9a41-4cbd-b29f-d2170fd0eda5",
+      "name": "List Documents",
       "credentials": {
         "postgres": {
           "id": "uAPlNaYsy8ebAniA",
@@ -275,11 +275,11 @@
       "type": "n8n-nodes-base.postgresTool",
       "typeVersion": 2.5,
       "position": [
-        192,
-        128
+        32,
+        992
       ],
-      "id": "98226386-3cef-4efe-9b14-2e164c1aefe4",
-      "name": "Get File Contents1",
+      "id": "e5f92998-a276-4183-95d6-9661f61e1a4f",
+      "name": "Get File Contents",
       "credentials": {
         "postgres": {
           "id": "uAPlNaYsy8ebAniA",
@@ -298,11 +298,11 @@
       "type": "n8n-nodes-base.postgresTool",
       "typeVersion": 2.5,
       "position": [
-        320,
-        128
+        160,
+        992
       ],
-      "id": "5787191a-dac3-4bff-ab26-5d1e531ff98c",
-      "name": "Query Document Rows1",
+      "id": "e503571e-a8d4-4c67-ab02-43fec016dbdf",
+      "name": "Query Document Rows",
       "credentials": {
         "postgres": {
           "id": "uAPlNaYsy8ebAniA",
@@ -322,11 +322,11 @@
       "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
       "typeVersion": 1,
       "position": [
-        448,
-        128
+        368,
+        992
       ],
-      "id": "7cfb728c-7186-4ef4-bf3c-dc2533201091",
-      "name": "Postgres PGVector Store5",
+      "id": "70e19a48-3060-4707-ae9f-85bafaa3a8f8",
+      "name": "Postgres PGVector Store",
       "credentials": {
         "postgres": {
           "id": "uAPlNaYsy8ebAniA",
@@ -341,11 +341,11 @@
       "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
       "typeVersion": 1,
       "position": [
-        528,
-        288
+        368,
+        1152
       ],
-      "id": "105d20a1-dd63-4d0e-bd67-eac5235ba6a8",
-      "name": "Embeddings Google Gemini4",
+      "id": "d199eefc-921e-4c0b-998b-582da559a340",
+      "name": "Embeddings Google Gemini",
       "credentials": {
         "googlePalmApi": {
           "id": "32bPIi6DQUfKBjyy",
@@ -366,11 +366,11 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
       "position": [
-        -464,
-        48
+        -624,
+        912
       ],
-      "id": "3085d035-e501-4d7c-bec0-0b6fb4a4d717",
-      "name": "OpenAI Chat Model",
+      "id": "54473bde-eac1-4dbc-bb57-20339a77ba2e",
+      "name": "OpenAI Chat Model1",
       "credentials": {
         "openAiApi": {
           "id": "PqAOvGZFN7hnms72",
@@ -391,11 +391,11 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
       "position": [
-        -176,
-        112
+        -336,
+        976
       ],
-      "id": "189834e8-42d9-49f9-ba9d-7b06e4e8c3ac",
-      "name": "OpenAI Chat Model3",
+      "id": "f89c2b09-9891-4d59-a112-13cf8944648f",
+      "name": "OpenAI Chat Model4",
       "credentials": {
         "openAiApi": {
           "id": "PqAOvGZFN7hnms72",
@@ -405,176 +405,176 @@
     }
   ],
   "connections": {
-    "AI Language Model2": {
+    "AI Language Model": {
       "main": [
         [
           {
-            "node": "Process AI Response1",
+            "node": "Process AI Response",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Start Loading Animation1": {
+    "Start Loading Animation": {
       "main": [
         [
           {
-            "node": "AI Language Model3",
+            "node": "AI Language Model4",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "AI Language Model3": {
+    "AI Language Model4": {
       "main": [
         [
           {
-            "node": "AI Language Model2",
+            "node": "AI Language Model",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "SerpAPI": {
+    "SerpAPI1": {
       "ai_tool": [
         [
           {
-            "node": "AI Language Model2",
+            "node": "AI Language Model",
             "type": "ai_tool",
             "index": 0
           }
         ]
       ]
     },
-    "Webhook Entry1": {
+    "Webhook Entry": {
       "main": [
         [
           {
-            "node": "Filter Message Events1",
+            "node": "Filter Message Events",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Filter Message Events1": {
+    "Filter Message Events": {
       "main": [
         [
           {
-            "node": "Message Processor1",
+            "node": "Message Processor",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Message Processor1": {
+    "Message Processor": {
       "main": [
         [
           {
-            "node": "Start Loading Animation1",
+            "node": "Start Loading Animation",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Process AI Response1": {
+    "Process AI Response": {
       "main": [
         [
           {
-            "node": "Send Response to LINE1",
+            "node": "Send Response to LINE",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Postgres Chat Memory1": {
+    "Postgres Chat Memory": {
       "ai_memory": [
         [
           {
-            "node": "AI Language Model2",
+            "node": "AI Language Model",
             "type": "ai_memory",
             "index": 0
           }
         ]
       ]
     },
-    "List Documents1": {
+    "List Documents": {
       "ai_tool": [
         [
           {
-            "node": "AI Language Model2",
+            "node": "AI Language Model",
             "type": "ai_tool",
             "index": 0
           }
         ]
       ]
     },
-    "Get File Contents1": {
+    "Get File Contents": {
       "ai_tool": [
         [
           {
-            "node": "AI Language Model2",
+            "node": "AI Language Model",
             "type": "ai_tool",
             "index": 0
           }
         ]
       ]
     },
-    "Query Document Rows1": {
+    "Query Document Rows": {
       "ai_tool": [
         [
           {
-            "node": "AI Language Model2",
+            "node": "AI Language Model",
             "type": "ai_tool",
             "index": 0
           }
         ]
       ]
     },
-    "Postgres PGVector Store5": {
+    "Postgres PGVector Store": {
       "ai_tool": [
         [
           {
-            "node": "AI Language Model2",
+            "node": "AI Language Model",
             "type": "ai_tool",
             "index": 0
           }
         ]
       ]
     },
-    "Embeddings Google Gemini4": {
+    "Embeddings Google Gemini": {
       "ai_embedding": [
         [
           {
-            "node": "Postgres PGVector Store5",
+            "node": "Postgres PGVector Store",
             "type": "ai_embedding",
             "index": 0
           }
         ]
       ]
     },
-    "OpenAI Chat Model": {
+    "OpenAI Chat Model1": {
       "ai_languageModel": [
         [
           {
-            "node": "AI Language Model3",
+            "node": "AI Language Model4",
             "type": "ai_languageModel",
             "index": 0
           }
         ]
       ]
     },
-    "OpenAI Chat Model3": {
+    "OpenAI Chat Model4": {
       "ai_languageModel": [
         [
           {
-            "node": "AI Language Model2",
+            "node": "AI Language Model",
             "type": "ai_languageModel",
             "index": 0
           }
